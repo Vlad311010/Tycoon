@@ -31,7 +31,7 @@ public class BuildingSystem : MonoBehaviour
             Remove();
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.R))
         {
             placingRotation = (placingRotation + 90f) % 360;
         }
