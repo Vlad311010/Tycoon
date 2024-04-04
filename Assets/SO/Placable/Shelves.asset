@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a7a7cee9c4ea30469970056fe967160, type: 3}
   m_Name: Shelves
   m_EditorClassIdentifier: 
+  preview: {fileID: 1316275196339401820, guid: 6662fb42785c02f4b9dd2e49e17ce263, type: 3}
   prefab: {fileID: 1316275196339401820, guid: 6662fb42785c02f4b9dd2e49e17ce263, type: 3}
   extents: {x: 2, y: 1}
   icon: {fileID: 0}

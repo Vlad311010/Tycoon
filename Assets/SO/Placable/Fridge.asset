@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a7a7cee9c4ea30469970056fe967160, type: 3}
   m_Name: Fridge
   m_EditorClassIdentifier: 
+  preview: {fileID: 2252681036694120097, guid: aa3880e968ab32e46be4e3cfffad84af, type: 3}
   prefab: {fileID: 2252681036694120097, guid: f12efff5c2408ae4cb8f8a404cacec7c, type: 3}
-  extents: {x: 2, y: 1}
+  extents: {x: 2, y: 2}
   icon: {fileID: 0}
   description: Fridge Description
   price: 100

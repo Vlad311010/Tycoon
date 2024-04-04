@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a7a7cee9c4ea30469970056fe967160, type: 3}
   m_Name: FridgeLarge
   m_EditorClassIdentifier: 
+  preview: {fileID: 5427067696328562422, guid: 7b3c20a0832791742abe08706c1fcbdc, type: 3}
   prefab: {fileID: 5427067696328562422, guid: 7b3c20a0832791742abe08706c1fcbdc, type: 3}
   extents: {x: 1, y: 1}
   icon: {fileID: 0}

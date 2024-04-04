@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BuildingSystem : MonoBehaviour
 {
@@ -16,7 +17,7 @@ public class BuildingSystem : MonoBehaviour
 
     void Start()
     {
-        preview = Instantiate(objectToPlace.prefab, transform);
+        preview = Instantiate(objectToPlace.preview, transform);
     }
 
     void Update()

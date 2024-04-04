@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlaceableSO : ScriptableObject
 {
     [Header("Placing data")]
+    public GameObject preview;
     public GameObject prefab;
     public Vector2Int extents;
 
