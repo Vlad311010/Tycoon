@@ -5,56 +5,26 @@ public class BuildingGrid : MonoBehaviour
     [SerializeField] Vector2Int size;
     [SerializeField] float cellSize;
     [SerializeField] Vector3 origin;
-    
 
     private GridSystem<CellData> grid;
-    
+    private new BoxCollider collider;
 
 
 
     private void Awake()
     {
-        grid = new GridSystem<CellData>(size.x, size.y, cellSize, origin, (GridSystem<CellData> grid, int x, int y) => new CellData(grid, x, y) );
-        // preview = Instantiate(objectToPlace.prefab, transform);
+        collider = GetComponent<BoxCollider>();
+        grid = new GridSystem<CellData>(size.x, size.y, cellSize, origin, (GridSystem<CellData> grid, int x, int y) => new CellData(grid, x, y));
+
+        SetUpCollider();
     }
 
-/*    private void Update()
+    private void SetUpCollider()
     {
-        if (Input.GetMouseButtonDown(0)) 
-        {
-            if (Utils.GetMouseWorldPositionRaycast(out Vector3 worldPos))
-            {
-                PlaceObject(objectToPlace, worldPos, placingRotation);
-            }
-        }
-
-        if (Input.GetMouseButtonDown(1))
-        {
-            if (Utils.GetMouseWorldPositionRaycast(out Vector3 worldPos))
-            {
-                RemoveObject(worldPos);
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            placingRotation = (placingRotation + 90f) % 360;
-        }
-
-        if (Utils.GetMouseWorldPositionRaycast(out Vector3 mousePos))
-        {
-            Vector2Int cellPos = grid.GetXY(mousePos);
-            Vector2Int rotationOffset = CalculateRotationOffset(objectToPlace.extents, placingRotation);
-            preview.transform.position = grid.GetWorldPosition(cellPos + rotationOffset);
-            preview.transform.rotation = Quaternion.Euler(0, placingRotation, 0);
-            Material previeMaterial = IsObjectCanBePlaced(objectToPlace, cellPos, placingRotation) ? positive : negative;
-            foreach (var mesh in preview.GetComponentsInChildren<MeshRenderer>())
-            {
-                mesh.material = previeMaterial;
-            }
-        }
+        collider.center = new Vector3(origin.x + (size.x / 2f), origin.y, origin.z + (size.y / 2f));
+        collider.size = new Vector3(size.x, 0f, size.y);
     }
-*/
+
     private Vector2Int CalculateRotationOffset(Vector2Int extents, float rotation)
     {
         if (Mathf.Approximately(rotation, 0))
@@ -150,7 +120,7 @@ public class BuildingGrid : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(new Vector3(origin.x + (size.x / 2), origin.y, origin.z + (size.y / 2)), new Vector3(size.x, 0f, size.y));
+        Gizmos.DrawWireCube(new Vector3(origin.x + (size.x / 2f), origin.y, origin.z + (size.y / 2f)), new Vector3(size.x, 0f, size.y));
         
         if (grid == null) return;
 
