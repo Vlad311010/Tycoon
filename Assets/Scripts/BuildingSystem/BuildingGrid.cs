@@ -1,38 +1,38 @@
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class GridBuildingSystem : MonoBehaviour
+public class BuildingGrid : MonoBehaviour
 {
     [SerializeField] Vector2Int size;
     [SerializeField] float cellSize;
     [SerializeField] Vector3 origin;
-    [SerializeField] PlaceableSO objectToPlace;
     
-    [SerializeField] Material positive;
-    [SerializeField] Material negative;
 
     private GridSystem<CellData> grid;
-    private float placingRotation = 0f;
-
-    private GameObject preview;
-
-
+    
 
 
 
     private void Awake()
     {
         grid = new GridSystem<CellData>(size.x, size.y, cellSize, origin, (GridSystem<CellData> grid, int x, int y) => new CellData(grid, x, y) );
-        preview = Instantiate(objectToPlace.prefab, transform);
+        // preview = Instantiate(objectToPlace.prefab, transform);
     }
 
-    private void Update()
+/*    private void Update()
     {
         if (Input.GetMouseButtonDown(0)) 
         {
             if (Utils.GetMouseWorldPositionRaycast(out Vector3 worldPos))
             {
                 PlaceObject(objectToPlace, worldPos, placingRotation);
+            }
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            if (Utils.GetMouseWorldPositionRaycast(out Vector3 worldPos))
+            {
+                RemoveObject(worldPos);
             }
         }
 
@@ -44,7 +44,6 @@ public class GridBuildingSystem : MonoBehaviour
         if (Utils.GetMouseWorldPositionRaycast(out Vector3 mousePos))
         {
             Vector2Int cellPos = grid.GetXY(mousePos);
-            Debug.Log(cellPos);
             Vector2Int rotationOffset = CalculateRotationOffset(objectToPlace.extents, placingRotation);
             preview.transform.position = grid.GetWorldPosition(cellPos + rotationOffset);
             preview.transform.rotation = Quaternion.Euler(0, placingRotation, 0);
@@ -55,25 +54,7 @@ public class GridBuildingSystem : MonoBehaviour
             }
         }
     }
-
-    /*private Vector2Int CalculateRotationOffset(Vector2Int extents, Quaternion rotation)
-    {
-        switch (rotation)
-        {
-            case Quaternion q when q == Quaternion.Euler(0, 0, 0):
-                return Vector2Int.zero;
-            case Quaternion q when q == Quaternion.Euler(0, 90, 0):
-                return new Vector2Int(0, extents.x);
-            case Quaternion q when q == Quaternion.Euler(0, 180, 0):
-                return extents;
-            case Quaternion q when q == Quaternion.Euler(0, 270, 0):
-                return new Vector2Int(extents.y, 0);
-            default:
-                Debug.Log("DEFF");
-                return Vector2Int.zero;
-        }
-    }*/
-
+*/
     private Vector2Int CalculateRotationOffset(Vector2Int extents, float rotation)
     {
         if (Mathf.Approximately(rotation, 0))
@@ -82,15 +63,22 @@ public class GridBuildingSystem : MonoBehaviour
             return new Vector2Int(0, extents.x);
         else if (Mathf.Approximately(rotation, 180))
             return extents;
-        else if (Mathf.Approximately(rotation, 180))
+        else if (Mathf.Approximately(rotation, 270))
             return new Vector2Int(extents.y, 0);
         else
             return Vector2Int.zero;
     }
-    
+
+
+    public bool CanBePlaced(PlaceableSO obj, Vector3 worldPos, float rotation)
+    {
+        Vector2Int cellPos = grid.GetXY(worldPos);
+        return IsObjectCanBePlaced(obj, cellPos, rotation);
+    }
+
     private bool IsObjectCanBePlaced(PlaceableSO obj, Vector2Int gridCoordinates, float rotation) 
     {
-        Vector2Int extents = obj.extents.Rotate(rotation).Abs();
+        Vector2Int extents = obj.GetExtents(rotation);
         for (int y = 0; y < extents.y; y++)
         {
             for (int x = 0; x < extents.x; x++)
@@ -106,49 +94,80 @@ public class GridBuildingSystem : MonoBehaviour
         return true;
     }
 
-    private void PlaceObject(PlaceableSO obj, Vector3 clickWorldPos, float rotation)
+    public void PlaceObject(PlaceableSO obj, Vector3 clickWorldPos, float rotation)
     {
         Vector2Int cellPos = grid.GetXY(clickWorldPos);
         if (IsObjectCanBePlaced(obj, cellPos, rotation))
         {
             Vector2Int rotationOffset = CalculateRotationOffset(obj.extents, rotation);
-            Transform placedObj = Instantiate(obj.prefab, grid.GetWorldPosition(cellPos + rotationOffset), Quaternion.Euler(0, rotation, 0)).transform;
-            Vector2Int extents = obj.extents.Rotate(rotation).Abs();
+            Transform placedObjectTransform = Instantiate(obj.prefab, grid.GetWorldPosition(cellPos + rotationOffset), Quaternion.Euler(0, rotation, 0)).transform;
+            Vector2Int extents = obj.GetExtents(rotation);
+            PlacedObject placedObject = new PlacedObject(placedObjectTransform, cellPos, rotation, obj);
             for (int y = 0; y < extents.y; y++)
             {
                 for (int x = 0; x < extents.x; x++)
                 {
                     CellData occupiedCell = grid.GetCell(cellPos + new Vector2Int(x, y));
-                    occupiedCell.PlaceObject(placedObj);
+                    occupiedCell.PlaceObject(placedObject);
                 }
             }
             
         }
     }
 
+    public void RemoveObject(Vector3 clickWorldPos)
+    {
+        Vector2Int cellPos = grid.GetXY(clickWorldPos);
+        CellData targetCell = grid.GetCell(cellPos);
+        if (targetCell.IsEmpty()) return;
+
+        PlacedObject placedObject = targetCell.PlacedObject;
+        Vector2Int objectOrigin = grid.GetCell(targetCell.GetPlacedObjectOrigin()).Coordinates;
+        Vector2Int extents = placedObject.placeableSO.GetExtents(placedObject.rotation);
+        
+        Destroy(targetCell.PlacedGO);
+        for (int y = 0; y < extents.y; y++)
+        {
+            for (int x = 0; x < extents.x; x++)
+            {
+                Debug.Log(objectOrigin + new Vector2Int(x, y));
+                CellData occupiedCell = grid.GetCell(objectOrigin + new Vector2Int(x, y));
+                occupiedCell.RemoveObject();
+            }
+        }
+    }
+
+    public Vector3 PreviewPosition(PlaceableSO obj, Vector3 worldPos, float rotation)
+    {
+        Vector2Int cellPos = grid.GetXY(worldPos);
+        Vector2Int rotationOffset = CalculateRotationOffset(obj.extents, rotation);
+        return grid.GetWorldPosition(cellPos + rotationOffset);
+    }
+
+
+
 
     private void OnDrawGizmos()
     {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireCube(new Vector3(origin.x + (size.x / 2), origin.y, origin.z + (size.y / 2)), new Vector3(size.x, 0f, size.y));
+        
         if (grid == null) return;
 
         grid.DebugDraw();
-        /* Gizmos.color = Color.black; 
-        for (int y = 0; y < size.y; y++)
-        {
-            for (int x = 0; x < size.x; x++)
-            {
-                Gizmos.DrawCube(grid.GetWorldPosition(x, y), Vector3.one * 0.1f);
-            }
-        }*/
     }
 
     public class CellData
     {
+        public PlacedObject PlacedObject { get => placedObject.Value; }
+        public GameObject PlacedGO { get => placedObject.Value.instanceRef.gameObject; }
+        public Vector2Int Coordinates { get => new Vector2Int(x, y); }
+
         private GridSystem<CellData> grid;
         private int x; 
         private int y;
 
-        Transform placedObject = null;
+        PlacedObject? placedObject = null;
 
         public CellData(GridSystem<CellData> grid, int x, int y)
         {
@@ -157,22 +176,29 @@ public class GridBuildingSystem : MonoBehaviour
             this.y = y; 
         }
 
-        public void PlaceObject(Transform obj)
+        public void PlaceObject(PlacedObject obj)
         {
             placedObject = obj;
-            grid.TriggerGridObjectChanged(x, y);
+            grid.TriggerCellhanged(x, y);
         }
 
         public void RemoveObject()
         {
             placedObject = null;
-            grid.TriggerGridObjectChanged(x, y);
+            grid.TriggerCellhanged(x, y);
+        }
+
+        public Vector2Int GetPlacedObjectOrigin()
+        {
+            if (!placedObject.HasValue) 
+                return new Vector2Int(-1, -1);
+            
+            return placedObject.Value.origin;
         }
 
         public bool IsEmpty()
         {
             return placedObject == null;
-
         }
 
         public override string ToString()

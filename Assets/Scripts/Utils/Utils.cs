@@ -38,6 +38,20 @@ public class Utils : MonoBehaviour
         return false;
     }
 
+    public static bool GetMouseWorldPositionRaycast(out Vector3 position, LayerMask layerMask, out Collider collider)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hitData;
 
+        if (Physics.Raycast(ray, out hitData, 1000, layerMask))
+        {
+            collider = hitData.collider;
+            position = hitData.point;
+            return true;
+        }
 
+        position = Vector3.zero;
+        collider = null;
+        return false;
+    }
 }

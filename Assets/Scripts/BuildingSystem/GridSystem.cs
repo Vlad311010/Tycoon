@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class GridSystem<T>
 {
-    public event EventHandler<OnGridObjectChangedEventArgs> OnGridObjectChanged;
-    public class OnGridObjectChangedEventArgs : EventArgs
+    public event EventHandler<OnCellChangedEventArgs> OnCellChanged;
+    public class OnCellChangedEventArgs : EventArgs
     {
         public int x;
         public int y;
@@ -75,18 +75,18 @@ public class GridSystem<T>
         if (x >= 0 && y >= 0 && x < width && y < height)
         {
             grid[x, y] = cell;
-            if (OnGridObjectChanged != null)
+            if (OnCellChanged != null)
             {
-                OnGridObjectChanged(this, new OnGridObjectChangedEventArgs { x = x, y = y });
+                OnCellChanged(this, new OnCellChangedEventArgs { x = x, y = y });
             }
         }
     }
 
-    public void TriggerGridObjectChanged(int x, int y)
+    public void TriggerCellhanged(int x, int y)
     {
-        if (OnGridObjectChanged != null)
+        if (OnCellChanged != null)
         {
-            OnGridObjectChanged(this, new OnGridObjectChangedEventArgs { x = x, y = y });
+            OnCellChanged(this, new OnCellChangedEventArgs { x = x, y = y });
         }
     }
 

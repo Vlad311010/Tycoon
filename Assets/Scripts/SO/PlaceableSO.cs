@@ -11,4 +11,11 @@ public class PlaceableSO : ScriptableObject
     public Sprite icon;
     public string description;
     public int price;
+
+
+    public Vector2Int GetExtents(float rotation = 0)
+    {
+        return extents.Rotate(rotation).Abs();
+    }
+
 }
