@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -5,7 +6,7 @@ public static class AIGeneral
 {
     public static bool AgentIsAtDestinationPoint(NavMeshAgent agent, float threshold = 0.25f)
     {
-        return agent.path.PathDistance() < threshold;
+        return Vector3.Distance(agent.pathEndPosition, agent.transform.position) < threshold;
     }
 
     public static void CreatePath(NavMeshAgent agent, Vector3 target)
@@ -26,29 +27,24 @@ public static class AIGeneral
 
     public static void LookAt(Transform self, Transform target)
     {
-        Vector3 playerDir = (target.position - self.position).normalized;
-        self.rotation = Quaternion.LookRotation(Vector3.forward, playerDir);
+        LookAt(self, target.position);
     }
 
     public static void LookAt(Transform self, Vector3 target)
     {
         Vector3 playerDir = (target - self.position).normalized;
-        self.rotation = Quaternion.LookRotation(Vector3.forward, playerDir);
+        self.rotation = Quaternion.LookRotation(Vector3.up, playerDir);
     }
 
     public static void LookAt(Transform self, Transform target, float step, bool inverse=true)
     {
-        Vector3 playerDir = (target.position - self.position).normalized;
-        Quaternion desiredRotation = Quaternion.LookRotation(Vector3.forward, playerDir);
-        if (inverse)
-            desiredRotation = Quaternion.Euler(desiredRotation.eulerAngles.x, desiredRotation.eulerAngles.y, desiredRotation.eulerAngles.z - 180);
-        self.rotation = Quaternion.RotateTowards(self.rotation, desiredRotation, step * Time.deltaTime);
+        LookAt(self, target.position, step, inverse);
     }
 
     public static void LookAt(Transform self, Vector3 target, float step, bool inverse = true)
     {
         Vector3 playerDir = (target - self.position).normalized;
-        Quaternion desiredRotation = Quaternion.LookRotation(Vector3.forward, playerDir);
+        Quaternion desiredRotation = Quaternion.LookRotation(Vector3.up, playerDir);
         if (inverse)
             desiredRotation = Quaternion.Euler(desiredRotation.eulerAngles.x, desiredRotation.eulerAngles.y, desiredRotation.eulerAngles.z - 180);
         self.rotation = Quaternion.RotateTowards(self.rotation, desiredRotation, step * Time.deltaTime);

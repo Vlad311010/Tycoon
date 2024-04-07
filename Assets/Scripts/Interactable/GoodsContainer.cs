@@ -3,13 +3,21 @@ using UnityEngine;
 
 public class GoodsContainer : MonoBehaviour, IInteractable
 {
+    public Transform LookAt { get => lookAt; }
+
     [SerializeField] Transform interactionPoint;
     [SerializeField] PlaceableSO objectData;
+    [SerializeField] Transform lookAt;
 
-    [SerializeField] Vector2 interacionTime;
+    public Vector2 interacionTime;
 
     public void Interact(AICore core)
     {
-        Debug.Log("Buy");
+        core.CustomerData.goodsCost += objectData.goodsCost;
+    }
+
+    public int ItemMinimalPrice()
+    {
+        return objectData.goodsCost;
     }
 }

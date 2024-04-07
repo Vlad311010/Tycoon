@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8843888401776709550}
   - component: {fileID: 7390140588238533649}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Fridge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31,6 +31,7 @@ Transform:
   m_Children:
   - {fileID: 6668305236370216845}
   - {fileID: 8920278865711965979}
+  - {fileID: 3274982595456869714}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -48,7 +49,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionPoint: {fileID: 8920278865711965979}
   objectData: {fileID: 11400000, guid: b4e3b87c89f8c5146be65a6c4e8cc43f, type: 2}
-  interacionTime: {x: 0, y: 0}
+  lookAt: {fileID: 3274982595456869714}
+  interacionTime: {x: 1, y: 2}
+--- !u!1 &2566736672382253658
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3274982595456869714}
+  m_Layer: 7
+  m_Name: LookAt
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3274982595456869714
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2566736672382253658}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1, y: 1, z: 1.8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8843888401776709550}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4556817711192650043
 GameObject:
   m_ObjectHideFlags: 0
@@ -58,7 +91,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8920278865711965979}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: InteractionZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +125,7 @@ GameObject:
   - component: {fileID: 6668305236367316905}
   - component: {fileID: 6668305236368315753}
   - component: {fileID: 6668305236372677897}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: glass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -190,7 +223,7 @@ GameObject:
   - component: {fileID: 6668305236367316907}
   - component: {fileID: 6668305236368315755}
   - component: {fileID: 6668305236372677899}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: frame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -285,7 +318,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6668305236370216845}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -300,7 +333,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6668305236370574253}
   m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
-  m_LocalPosition: {x: 1, y: 0, z: 1.581}
+  m_LocalPosition: {x: 1, y: 0, z: 0.6}
   m_LocalScale: {x: 0.835, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -322,7 +355,7 @@ GameObject:
   - component: {fileID: 6668305236367316911}
   - component: {fileID: 6668305236368315759}
   - component: {fileID: 6668305236372677903}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: metal
   m_TagString: Untagged
   m_Icon: {fileID: 0}

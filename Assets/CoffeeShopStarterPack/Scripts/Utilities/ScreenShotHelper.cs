@@ -24,6 +24,8 @@ public class ScreenShotHelper : MonoBehaviour {
     public bool isMultipleObject;
     [SerializeField]
     public string ScreenShotPath;
+    [SerializeField]
+    public float radius = 1;
 
     public void TakeScreenShot()
     {
@@ -51,7 +53,8 @@ public class ScreenShotHelper : MonoBehaviour {
         screenShotCam.nearClipPlane = .03f;
         screenShotCam.farClipPlane = 400f;
         screenShotCam.clearFlags = CameraClearFlags.Color;
-        screenShotCam.backgroundColor = Color.cyan;
+        // screenShotCam.backgroundColor = Color.cyan;
+        screenShotCam.backgroundColor = new Color(0,0,0,0);
         screenShotCam.aspect = 1.0f;
         screenShotCam.name = "ScreenShotCam";
 
@@ -130,7 +133,6 @@ public class ScreenShotHelper : MonoBehaviour {
 
         Vector3 objBounds = currentGameObject.transform.EncapsulateBounds().extents;
         var boundsMagnitude = objBounds.magnitude;
-        var radius = 1f;
         var distance = (boundsMagnitude / (Mathf.Tan(0.5f *screenShotCam.fieldOfView * Mathf.Deg2Rad)) * radius);
         
         var maxZoomIn = distance * 5f;

@@ -1,24 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.IMGUI.Controls;
+using Interfaces;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class BuildingSystem : MonoBehaviour
 {
     [SerializeField] PlaceableSO objectToPlace;
 
     [SerializeField] LayerMask gridLayerMask;
+    [SerializeField] LayerMask blockerLayerMask;
     [SerializeField] Material positive;
     [SerializeField] Material negative;
 
     private float placingRotation = 0f;
     private GameObject preview;
 
+
+    private void Awake()
+    {
+        GameEvents.current.onSelectedPlacableObjectChange += ChangePlacableObject;
+    }
+
     void Start()
     {
-        preview = Instantiate(objectToPlace.preview, transform);
+        CreatePreview();
     }
+
+
 
     void Update()
     {
@@ -37,8 +43,9 @@ public class BuildingSystem : MonoBehaviour
             placingRotation = (placingRotation + 90f) % 360;
         }
 
-        if (Utils.GetMouseWorldPositionRaycast(out Vector3 mousePos, gridLayerMask, out Collider gridCollider))
+        if (Utils.GetMouseWorldPositionRaycast(out Vector3 mousePos, gridLayerMask | blockerLayerMask, out Collider gridCollider) && !blockerLayerMask.CheckLayer(gridCollider.gameObject.layer))
         {
+            preview.SetActive(true);
             BuildingGrid grid = gridCollider.GetComponent<BuildingGrid>();
             preview.transform.position = grid.PreviewPosition(objectToPlace, mousePos, placingRotation);
             preview.transform.rotation = Quaternion.Euler(0, placingRotation, 0);
@@ -49,16 +56,48 @@ public class BuildingSystem : MonoBehaviour
                 mesh.material = previeMaterial;
             }
         }
+        else
+            preview.SetActive(false);
+
 
     }
 
+    private void ChangePlacableObject(PlaceableSO objectData)
+    {
+        objectToPlace = objectData;
+        CreatePreview();
+    }
+    
+    private void CreatePreview()
+    {
+        if (preview != null)
+        {
+            Destroy(preview);
+        }
+
+        preview = Instantiate(objectToPlace.preview, transform);
+    }
+
+
     private void Build()
     {
-        if (Utils.GetMouseWorldPositionRaycast(out Vector3 mousePos, gridLayerMask, out Collider gridCollider))
+        if (Utils.GetMouseWorldPositionRaycast(out Vector3 mousePos, blockerLayerMask, out Collider collider))
+        {
+            if (collider.TryGetComponent(out IClickable clickable))
+            {
+                clickable.OnClick();
+            }
+        }
+
+        /*if (Utils.GetMouseWorldPositionRaycast(out Vector3 mousePos, gridLayerMask, out Collider gridCollider))
         {
             BuildingGrid grid = gridCollider.GetComponent<BuildingGrid>();
-            grid.PlaceObject(objectToPlace, mousePos, placingRotation);
-        }
+            grid.PlaceObject(objectToPlace, mousePos, placingRotation, out GameObject placedGO);
+            if (placedGO.TryGetComponent(out GoodsContainer container))
+            {
+                GameEvents.current.GoodsContainerPlaced(container);
+            }
+        }*/
     }
 
     private void Remove()

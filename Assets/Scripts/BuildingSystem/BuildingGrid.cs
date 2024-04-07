@@ -1,10 +1,13 @@
+using Structs;
 using UnityEngine;
 
 public class BuildingGrid : MonoBehaviour
 {
     [SerializeField] Vector2Int size;
     [SerializeField] float cellSize;
-    [SerializeField] Vector3 origin;
+    [SerializeField] Transform gridRender;
+    Vector3 origin;
+
 
     private GridSystem<CellData> grid;
     private new BoxCollider collider;
@@ -13,15 +16,29 @@ public class BuildingGrid : MonoBehaviour
 
     private void Awake()
     {
+        origin = transform.position;
         collider = GetComponent<BoxCollider>();
         grid = new GridSystem<CellData>(size.x, size.y, cellSize, origin, (GridSystem<CellData> grid, int x, int y) => new CellData(grid, x, y));
 
+        SetUpMesh();
         SetUpCollider();
     }
 
+    private void SetUpMesh()
+    {
+        gridRender.localPosition = new Vector3((size.x / 2f), 0.1f, (size.y / 2f));
+        gridRender.localScale = new Vector3(size.x, 0f, size.y);
+
+        Renderer myRenderer = gridRender.GetComponent<Renderer>();
+        MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
+        propertyBlock.SetVector("_Tiling", new Vector4(size.x, size.y));
+        myRenderer.SetPropertyBlock(propertyBlock);
+    }
+
+
     private void SetUpCollider()
     {
-        collider.center = new Vector3(origin.x + (size.x / 2f), origin.y, origin.z + (size.y / 2f));
+        collider.center = new Vector3((size.x / 2f), 0, (size.y / 2f));
         collider.size = new Vector3(size.x, 0f, size.y);
     }
 
@@ -64,15 +81,16 @@ public class BuildingGrid : MonoBehaviour
         return true;
     }
 
-    public void PlaceObject(PlaceableSO obj, Vector3 clickWorldPos, float rotation)
+    public void PlaceObject(PlaceableSO obj, Vector3 clickWorldPos, float rotation, out GameObject placedGO)
     {
         Vector2Int cellPos = grid.GetXY(clickWorldPos);
+        placedGO = null;
         if (IsObjectCanBePlaced(obj, cellPos, rotation))
         {
             Vector2Int rotationOffset = CalculateRotationOffset(obj.extents, rotation);
-            Transform placedObjectTransform = Instantiate(obj.prefab, grid.GetWorldPosition(cellPos + rotationOffset), Quaternion.Euler(0, rotation, 0)).transform;
+            placedGO = Instantiate(obj.prefab, grid.GetWorldPosition(cellPos + rotationOffset), Quaternion.Euler(0, rotation, 0));
             Vector2Int extents = obj.GetExtents(rotation);
-            PlacedObject placedObject = new PlacedObject(placedObjectTransform, cellPos, rotation, obj);
+            PlacedObject placedObject = new PlacedObject(placedGO.transform, cellPos, rotation, obj);
             for (int y = 0; y < extents.y; y++)
             {
                 for (int x = 0; x < extents.x; x++)
@@ -81,7 +99,6 @@ public class BuildingGrid : MonoBehaviour
                     occupiedCell.PlaceObject(placedObject);
                 }
             }
-            
         }
     }
 
@@ -120,6 +137,7 @@ public class BuildingGrid : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
+        Vector3 origin = transform.position;
         Gizmos.DrawWireCube(new Vector3(origin.x + (size.x / 2f), origin.y, origin.z + (size.y / 2f)), new Vector3(size.x, 0f, size.y));
         
         if (grid == null) return;

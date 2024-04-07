@@ -1,24 +1,39 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public struct PlacedObject
+namespace Structs
 {
-    public Transform instanceRef;
-    public Vector2Int origin;
-    public float rotation;
-    public PlaceableSO placeableSO;
-
-    public PlacedObject(Transform instance, Vector2Int origin, float rotation, PlaceableSO so)
+    public struct PlacedObject
     {
-        instanceRef = instance;
-        this.origin = origin;
-        this.rotation = rotation;
-        this.placeableSO = so;
+        public Transform instanceRef;
+        public Vector2Int origin;
+        public float rotation;
+        public PlaceableSO placeableSO;
+
+        public PlacedObject(Transform instance, Vector2Int origin, float rotation, PlaceableSO so)
+        {
+            instanceRef = instance;
+            this.origin = origin;
+            this.rotation = rotation;
+            this.placeableSO = so;
+        }
+
+        public override string ToString()
+        {
+            return placeableSO.name;
+        }
+
     }
 
-    public override string ToString()
+    public class PersistentData
     {
-        return placeableSO.name;
+        int money;
+        List<GoodsContainer> containers;
+
+
+
+
     }
 
 }

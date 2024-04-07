@@ -42,6 +42,7 @@ public class ScreenShotHelperEditor : Editor
         EditorGUILayout.PropertyField(isMultipleObject);
         EditorGUILayout.PropertyField(currentGameObject);
         EditorGUILayout.PropertyField(UITestImage);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("radius"));
 
         ScreenShotPath.stringValue = EditorGUILayout.TextField("Screenshot Path:", ScreenShotPath.stringValue);
 

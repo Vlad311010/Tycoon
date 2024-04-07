@@ -136,6 +136,34 @@ public partial class @DefaultControls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""Menu"",
+            ""id"": ""fab06313-46b2-4aeb-bb78-fc1efdf481f6"",
+            ""actions"": [
+                {
+                    ""name"": ""BackBtn"",
+                    ""type"": ""Button"",
+                    ""id"": ""8c8990fa-400d-408d-a91e-b278dee2b328"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""1815842f-0a57-46fd-a5c4-564fc9b01210"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BackBtn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -144,6 +172,9 @@ public partial class @DefaultControls: IInputActionCollection2, IDisposable
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_Movement = m_Camera.FindAction("Movement", throwIfNotFound: true);
         m_Camera_Rotation = m_Camera.FindAction("Rotation", throwIfNotFound: true);
+        // Menu
+        m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
+        m_Menu_BackBtn = m_Menu.FindAction("BackBtn", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -255,9 +286,59 @@ public partial class @DefaultControls: IInputActionCollection2, IDisposable
         }
     }
     public CameraActions @Camera => new CameraActions(this);
+
+    // Menu
+    private readonly InputActionMap m_Menu;
+    private List<IMenuActions> m_MenuActionsCallbackInterfaces = new List<IMenuActions>();
+    private readonly InputAction m_Menu_BackBtn;
+    public struct MenuActions
+    {
+        private @DefaultControls m_Wrapper;
+        public MenuActions(@DefaultControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @BackBtn => m_Wrapper.m_Menu_BackBtn;
+        public InputActionMap Get() { return m_Wrapper.m_Menu; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(MenuActions set) { return set.Get(); }
+        public void AddCallbacks(IMenuActions instance)
+        {
+            if (instance == null || m_Wrapper.m_MenuActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_MenuActionsCallbackInterfaces.Add(instance);
+            @BackBtn.started += instance.OnBackBtn;
+            @BackBtn.performed += instance.OnBackBtn;
+            @BackBtn.canceled += instance.OnBackBtn;
+        }
+
+        private void UnregisterCallbacks(IMenuActions instance)
+        {
+            @BackBtn.started -= instance.OnBackBtn;
+            @BackBtn.performed -= instance.OnBackBtn;
+            @BackBtn.canceled -= instance.OnBackBtn;
+        }
+
+        public void RemoveCallbacks(IMenuActions instance)
+        {
+            if (m_Wrapper.m_MenuActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IMenuActions instance)
+        {
+            foreach (var item in m_Wrapper.m_MenuActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_MenuActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public MenuActions @Menu => new MenuActions(this);
     public interface ICameraActions
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnRotation(InputAction.CallbackContext context);
+    }
+    public interface IMenuActions
+    {
+        void OnBackBtn(InputAction.CallbackContext context);
     }
 }

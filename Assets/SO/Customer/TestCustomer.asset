@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8229c51a23b650b47b7c5844d693954b, type: 3}
   m_Name: TestCustomer
   m_EditorClassIdentifier: 
-  mood: 20
-  money: 100
+  initMood: 100
+  initMoney: 101
+  goodsCost: 0

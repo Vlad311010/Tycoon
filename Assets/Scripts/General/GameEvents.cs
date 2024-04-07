@@ -1,0 +1,58 @@
+using System;
+using UnityEngine;
+
+public class GameEvents : MonoBehaviour
+{
+    public static GameEvents current;
+    private void Awake()
+    {
+        current = this;
+    }
+
+    public event Action<GoodsContainer> onGoodsContainerPlaced;
+    public void GoodsContainerPlaced(GoodsContainer container)
+    {
+        if (onGoodsContainerPlaced != null)
+        {
+            onGoodsContainerPlaced(container);
+        }
+    }
+
+    public event Action<int> onCustomerPayment;
+    public void CustomerPays(int money)
+    {
+        if (onCustomerPayment != null)
+        {
+            onCustomerPayment(money);
+        }
+    }
+
+    public event Action<int, int> onMoneyAmountChange;
+    public void MoneyAmountChange(int total, int add)
+    {
+        if (onMoneyAmountChange != null)
+        {
+            onMoneyAmountChange(total, add);
+        }
+    }
+
+    public event Action<PlaceableSO> onSelectedPlacableObjectChange;
+    public void SelectedPlacableObjectChange(PlaceableSO objectData)
+    {
+        if (onSelectedPlacableObjectChange != null)
+        {
+            onSelectedPlacableObjectChange(objectData);
+        }
+
+    }
+
+    public event Action<string, Action> onPopupWindowCall;
+    public void PopupWindowCall(string text, Action okBtnAction)
+    {
+        if (onPopupWindowCall != null)
+        {
+            onPopupWindowCall(text, okBtnAction);
+        }
+    }
+
+}

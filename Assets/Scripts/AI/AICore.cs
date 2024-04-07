@@ -1,5 +1,6 @@
 using Interfaces;
-using System.Collections.Generic;
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -11,47 +12,88 @@ public class AICore : MonoBehaviour
     NavMeshAgent agent;
 
     [SerializeField] LayerMask floorLayerMask;    
-    [SerializeField] Transform follow;    
-
-    [SerializeField] CustomerSO customerData;
-
-
     [SerializeField] State currentState;
 
+    public bool isActive = true;
     public bool rotateTowardWaypoint = false;
+    public Transform lookAt;
+    
+    private CustomerSO customerData;
+    private Vector3 defaultPos;
+    private State startState;
 
 
     private void Awake()
     {
+        startState = currentState;
+        defaultPos = transform.position;
+        lookAt = transform;
         agent = GetComponent<NavMeshAgent>();
-        customerData = Instantiate(customerData);
+        agent.updateRotation = false;
     }
+
+    /*private void Start()
+    {
+        Initialize();
+    }*/
 
     private void Update()
     {
+        if (!isActive) return;
+
         if (rotateTowardWaypoint)
         {
-            Vector3 lookAt = agent.path.corners.Length > 1 ? agent.path.corners[1] : transform.forward;
-            AIGeneral.LookAt(transform, lookAt, agent.angularSpeed);
+            Vector3 lookAtPosition = agent.path.corners.Length > 1 ? agent.path.corners[1] : lookAt.position;
+            AIGeneral.LookAt(transform, lookAtPosition, agent.angularSpeed);
         }
 
         SwitchState(currentState.UpdateState(this));
         currentState.ExecuteState(this);
     }
 
+    public void Initialize(CustomerSO customerDataVariant)
+    {
+        customerData = CustomerSO.CreateInstance(customerDataVariant);
+        currentState = startState;
+        currentState.OnStateEnter(this);
+        agent.enabled = true;
+        isActive = true;
+    }
+
+    public void Despawn()
+    {
+        transform.position = defaultPos;
+        agent.enabled = false;
+        isActive = false;
+    }
+
     private void SwitchState(State newState)
     {
         if (currentState != newState)
         {
+            Debug.Log(currentState .ToString() + " -> " + newState.ToString());
             currentState = newState;
             newState.OnStateEnter(this);
         }
+    }
+
+    public void Interact(float time, IInteractable interactable, Action<AICore> action)
+    {
+        StartCoroutine(InteractionCoroutine(time, interactable, action));
+    }
+
+    private IEnumerator InteractionCoroutine(float time, IInteractable interactable, Action<AICore> action)
+    {
+        yield return new WaitForSeconds(time);
+        interactable.Interact(this);
+        action(this);
     }
 
     public void GetGoods(IInteractable interactable)
     {
         interactable.Interact(this);
     }
+
 
 
     private void OnDrawGizmosSelected()

@@ -12,6 +12,8 @@ public class PlaceableSO : ScriptableObject
     public Sprite icon;
     public string description;
     public int price;
+    public int goodsCost;
+
 
 
     public Vector2Int GetExtents(float rotation = 0)
