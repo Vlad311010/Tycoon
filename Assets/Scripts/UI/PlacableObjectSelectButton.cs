@@ -20,6 +20,7 @@ public class PlacableObjectSelectButton : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         GameEvents.current.SelectedPlacableObjectChange(objectData);
+        GameEvents.current.EnterBuildngMode();
     }
 
     public void UpdateUI(int totalMoney, int add)

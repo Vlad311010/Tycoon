@@ -15,6 +15,17 @@ public class GameEvents : MonoBehaviour
         if (onGoodsContainerPlaced != null)
         {
             onGoodsContainerPlaced(container);
+            PersistentDataManager.Save();
+        }
+    }
+
+    public event Action<GoodsContainer> onGoodsContainerRemoved;
+    public void GoodsContainerRemoved(GoodsContainer container)
+    {
+        if (onGoodsContainerRemoved != null)
+        {
+            onGoodsContainerRemoved(container);
+            PersistentDataManager.Save();
         }
     }
 
@@ -52,6 +63,24 @@ public class GameEvents : MonoBehaviour
         if (onPopupWindowCall != null)
         {
             onPopupWindowCall(text, okBtnAction);
+        }
+    }
+
+    public event Action onBuilingModeExit;
+    public void ExitBuildngMode()
+    {
+        if (onBuilingModeExit != null)
+        {
+            onBuilingModeExit();
+        }
+    }
+
+    public event Action onBuilingModeEnter;
+    public void EnterBuildngMode()
+    {
+        if (onBuilingModeEnter != null)
+        {
+            onBuilingModeEnter();
         }
     }
 

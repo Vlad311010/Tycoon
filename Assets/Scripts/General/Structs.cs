@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace Structs
@@ -25,14 +26,44 @@ namespace Structs
         }
 
     }
+    
+    [Serializable]
+    public struct GoodsContainerData
+    {
+        public string prefabName;
+        public string gridName;
+        public Vector2Int coordinates;
+        public Quaternion rotation;
 
+        public GoodsContainerData(GoodsContainer goodsContainer)
+        {
+            prefabName = goodsContainer.ObjectData.prefab.name;
+            gridName = goodsContainer.ConnectedGrid.gameObject.name;
+            coordinates = goodsContainer.GridCoordinates;
+            rotation = goodsContainer.transform.rotation;
+        }
+
+        public void Load()
+        {
+            GameObject placablePrefab = (GameObject)Resources.Load("Placable/" + prefabName);
+            BuildingGrid connectedGrid = GameObject.Find(gridName).GetComponent<BuildingGrid>();
+            connectedGrid.PlaceObjectAnew(placablePrefab.GetComponent<GoodsContainer>().ObjectData, coordinates, rotation.eulerAngles.y);
+            // GameObject.Instantiate(placablePrefab, position, rotation);
+        }
+    }
+
+
+    [Serializable]
     public class PersistentData
     {
-        int money;
-        List<GoodsContainer> containers;
-
-
-
+        public int money;
+        public List<GoodsContainerData> containers;
+        
+        public PersistentData()
+        {
+            money = 500;
+            containers = new List<GoodsContainerData>();
+        }
 
     }
 

@@ -11,4 +11,10 @@ namespace Interfaces
         public void OnClick();
     }
 
+    public interface IContainPersistentData
+    {
+        public void Save();
+        public void Load();
+    }
+
 }

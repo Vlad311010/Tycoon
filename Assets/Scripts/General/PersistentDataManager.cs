@@ -1,9 +1,10 @@
 using UnityEngine;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using Structs;
+using Interfaces;
+using System.Linq;
 
-public class PersistentDataManager : MonoBehaviour
+public class PersistentDataManager
 {
     public static PersistentData GameData { get => gameData == null ? Load() : gameData; set => gameData = value; }
 
@@ -26,6 +27,12 @@ public class PersistentDataManager : MonoBehaviour
             gameData = JsonUtility.FromJson<PersistentData>(File.ReadAllText(path));
             Debug.Assert(gameData != null, "Failed to load data");
             Debug.Log("Persistent Data Loaded");
+            IContainPersistentData[] persistentDataContainers = GameObject.FindObjectsOfType<MonoBehaviour>().OfType<IContainPersistentData>().ToArray();
+            foreach (IContainPersistentData persistentDataContainer in persistentDataContainers) 
+            {
+                persistentDataContainer.Load();
+            }
+
             return gameData;
         }
         else
@@ -36,11 +43,22 @@ public class PersistentDataManager : MonoBehaviour
 
     private static PersistentData CreateInitialData()
     {
-
         gameData = new PersistentData();
+        Debug.Log("Persistent Data Initiated");
         Save();
 
         return gameData;
+    }
+
+
+    
+    private static void RestoreObjects(PersistentData gameData)
+    {
+        for (int i = 0; i < gameData.containers.Count; i++)
+        {
+            gameData.containers[i].Load();
+        }
+
     }
 
 }

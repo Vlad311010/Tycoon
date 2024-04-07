@@ -2,6 +2,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
+[Serializable]
 public class GridSystem<T>
 {
     public event EventHandler<OnCellChangedEventArgs> OnCellChanged;

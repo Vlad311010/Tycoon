@@ -1,8 +1,12 @@
 using Structs;
+using System;
 using UnityEngine;
 
+[Serializable]
 public class BuildingGrid : MonoBehaviour
 {
+    public GridSystem<CellData> Grid { get => grid; }
+
     [SerializeField] Vector2Int size;
     [SerializeField] float cellSize;
     [SerializeField] Transform gridRender;
@@ -81,7 +85,7 @@ public class BuildingGrid : MonoBehaviour
         return true;
     }
 
-    public void PlaceObject(PlaceableSO obj, Vector3 clickWorldPos, float rotation, out GameObject placedGO)
+    public bool PlaceObject(PlaceableSO obj, Vector3 clickWorldPos, float rotation, out GameObject placedGO)
     {
         Vector2Int cellPos = grid.GetXY(clickWorldPos);
         placedGO = null;
@@ -99,7 +103,31 @@ public class BuildingGrid : MonoBehaviour
                     occupiedCell.PlaceObject(placedObject);
                 }
             }
+            placedGO.GetComponent<GoodsContainer>().ConnectedGrid = this;
+            placedGO.GetComponent<GoodsContainer>().GridCoordinates = cellPos;
+            GameEvents.current.GoodsContainerPlaced(placedGO.GetComponent<GoodsContainer>());
+            return true;
         }
+        return false;
+    }
+
+    public void PlaceObjectAnew(PlaceableSO obj, Vector2Int cellPos, float rotation) // TODO: refactor PlaceObject, PlaceObjectAnew
+    {
+        Vector2Int rotationOffset = CalculateRotationOffset(obj.extents, rotation);
+        GameObject placedGO = Instantiate(obj.prefab, grid.GetWorldPosition(cellPos + rotationOffset), Quaternion.Euler(0, rotation, 0));
+        Vector2Int extents = obj.GetExtents(rotation);
+        PlacedObject placedObject = new PlacedObject(placedGO.transform, cellPos, rotation, obj);
+        for (int y = 0; y < extents.y; y++)
+        {
+            for (int x = 0; x < extents.x; x++)
+            {
+                CellData occupiedCell = grid.GetCell(cellPos + new Vector2Int(x, y));
+                occupiedCell.PlaceObject(placedObject);
+            }
+        }
+        placedGO.GetComponent<GoodsContainer>().ConnectedGrid = this;
+        placedGO.GetComponent<GoodsContainer>().GridCoordinates = cellPos;
+        GameEvents.current.GoodsContainerPlaced(placedGO.GetComponent<GoodsContainer>());
     }
 
     public void RemoveObject(Vector3 clickWorldPos)
@@ -111,17 +139,25 @@ public class BuildingGrid : MonoBehaviour
         PlacedObject placedObject = targetCell.PlacedObject;
         Vector2Int objectOrigin = grid.GetCell(targetCell.GetPlacedObjectOrigin()).Coordinates;
         Vector2Int extents = placedObject.placeableSO.GetExtents(placedObject.rotation);
-        
+
+        GameEvents.current.GoodsContainerRemoved(targetCell.PlacedObject.instanceRef.GetComponent<GoodsContainer>());
         Destroy(targetCell.PlacedGO);
         for (int y = 0; y < extents.y; y++)
         {
             for (int x = 0; x < extents.x; x++)
             {
-                Debug.Log(objectOrigin + new Vector2Int(x, y));
                 CellData occupiedCell = grid.GetCell(objectOrigin + new Vector2Int(x, y));
                 occupiedCell.RemoveObject();
             }
         }
+        
+    }
+
+    public bool CellIsEmpty(Vector3 clickWorldPos)
+    {
+        Vector2Int cellPos = grid.GetXY(clickWorldPos);
+        CellData targetCell = grid.GetCell(cellPos);
+        return targetCell.IsEmpty();
     }
 
     public Vector3 PreviewPosition(PlaceableSO obj, Vector3 worldPos, float rotation)
@@ -145,6 +181,7 @@ public class BuildingGrid : MonoBehaviour
         grid.DebugDraw();
     }
 
+    [Serializable]
     public class CellData
     {
         public PlacedObject PlacedObject { get => placedObject.Value; }

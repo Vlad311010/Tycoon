@@ -1,34 +1,71 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerActions : MonoBehaviour
 {
-    DefaultControls control;
+    static DefaultControls control;
 
     [SerializeField] CameraController cameraController;
-
-    private bool hodlingCameraMovementInput = false;
+    PlayerInteractions playerInteractions;
 
     void Awake()
     {
         control = new DefaultControls();
         control.Enable();
 
-        // cameraController = GetComponent<CharacterActor>();
+        playerInteractions = GetComponent<PlayerInteractions>();
 
-        control.Camera.Movement.performed += cameraController.OnMovement;
-        control.Camera.Movement.canceled += cameraController.OnMovement;
+        control.Gameplay.Movement.performed += cameraController.OnMovement;
+        control.Gameplay.Movement.canceled += cameraController.OnMovement;
 
-        control.Camera.Rotation.performed += cameraController.OnRotation;
-        control.Camera.Rotation.canceled += cameraController.OnRotation;
+        control.Gameplay.Rotation.performed += cameraController.OnRotation;
+        control.Gameplay.Rotation.canceled += cameraController.OnRotation;
+
+
+        GameEvents.current.onBuilingModeEnter += EnterBuildingMode;
+        GameEvents.current.onBuilingModeExit += ExitBuildingMode;
     }
 
     private void OnDestroy()
     {
-        control.Camera.Movement.performed -= cameraController.OnMovement;
-        control.Camera.Movement.canceled -= cameraController.OnMovement;
+        control.Gameplay.Movement.performed -= cameraController.OnMovement;
+        control.Gameplay.Movement.canceled -= cameraController.OnMovement;
 
-        control.Camera.Rotation.performed -= cameraController.OnRotation;
-        control.Camera.Rotation.canceled -= cameraController.OnRotation;
+        control.Gameplay.Rotation.performed -= cameraController.OnRotation;
+        control.Gameplay.Rotation.canceled -= cameraController.OnRotation;
+
+        GameEvents.current.onBuilingModeEnter -= EnterBuildingMode;
+        GameEvents.current.onBuilingModeExit -= ExitBuildingMode;
+    }
+
+    private void EnterBuildingMode()
+    {
+        control.Gameplay.LeftClick.performed += playerInteractions.Build;
+        control.Gameplay.RightClick.performed += playerInteractions.Remove;
+
+        control.Gameplay.LeftClick.performed -= playerInteractions.OnLeftClick;
+        control.Gameplay.RightClick.performed -= playerInteractions.OnRightClick;
+    }
+
+    private void ExitBuildingMode()
+    {
+        control.Gameplay.LeftClick.performed += playerInteractions.OnLeftClick;
+        control.Gameplay.RightClick.performed += playerInteractions.OnRightClick;
+
+        control.Gameplay.LeftClick.performed -= playerInteractions.Build;
+        control.Gameplay.RightClick.performed -= playerInteractions.Remove;
+    }
+
+    public static void MouseInteractionSetActive(bool active)
+    {
+        if (active)
+        {
+            control.Gameplay.LeftClick.Enable();
+            control.Gameplay.RightClick.Enable();
+        }
+        else
+        {
+            control.Gameplay.LeftClick.Disable();
+            control.Gameplay.RightClick.Disable();
+        }
     }
 }

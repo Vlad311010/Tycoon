@@ -44,7 +44,8 @@ public class WindowsController : MonoBehaviour
 
         if (windowsStack.Count > 0)
             windowsStack.Peek()?.SetActive(false);
-        
+
+        PlayerActions.MouseInteractionSetActive(false);
         windowsStack.Push(window);
         window.OpenWindow();
     }
@@ -55,7 +56,10 @@ public class WindowsController : MonoBehaviour
         if (windowsStack.Count > 0)
             windowsStack.Peek().SetActive(true);
         else
+        {
             SceneController.Resume();
+            PlayerActions.MouseInteractionSetActive(true);
+        }
 
     }
 

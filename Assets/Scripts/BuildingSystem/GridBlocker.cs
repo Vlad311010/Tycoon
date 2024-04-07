@@ -6,11 +6,17 @@ public class GridBlocker : MonoBehaviour, IClickable
     [SerializeField] BuildingGrid grid;
     [SerializeField] string popupWindowText;
 
-    public bool removed;
+    [SerializeField]  bool blocked = true;
+
+    private void Awake()
+    {
+        if (!blocked)
+            Remove();
+    }
 
     public void Remove()
     {
-        removed = true;
+        blocked = false;
         grid.gameObject.SetActive(true);
         gameObject.SetActive(false);
     }
