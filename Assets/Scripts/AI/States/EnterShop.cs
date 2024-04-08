@@ -20,4 +20,8 @@ public class EnterShop : State
         else
             return this;
     }
+
+    public override void OnStateExit(AICore core)
+    {
+    }
 }

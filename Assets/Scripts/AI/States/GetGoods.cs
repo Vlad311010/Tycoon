@@ -12,13 +12,34 @@ public class GetGoods : State
     private bool goodsTaken = false;
     private bool interactionIsActive = false;
 
+    private AICore aiCore;
+
+    private void OnDestroy()
+    {
+        GameEvents.current.onGoodsContainerRemoved -= Reselect;
+    }
+
+
+    private void Reselect(GoodsContainer _)
+    {
+        aiCore.ForceStateChange(findGoods);
+    }
 
     public override void OnStateEnter(AICore core)
     {
+        GameEvents.current.onGoodsContainerRemoved += Reselect;
+
+        aiCore = core;
         goodsTaken = false;
         atDestinationPoint = false;
         interactionIsActive = false;
         target = SelectContainer(core.CustomerData.Money - core.CustomerData.goodsCost);
+        /*if (target == null) 
+        {
+            goodsTaken = true;
+            core.lookAt = core.transform;
+            return;
+        }*/
         
         AIGeneral.CreatePath(core.Agent, target.transform.position);
     }
@@ -43,7 +64,13 @@ public class GetGoods : State
     {
         if (goodsTaken)
             return findGoods;
-        else return this;
+        else    
+            return this;
+    }
+
+    public override void OnStateExit(AICore core)
+    {
+        GameEvents.current.onGoodsContainerRemoved -= Reselect;
     }
 
     private GoodsContainer SelectContainer(int availableMoney)

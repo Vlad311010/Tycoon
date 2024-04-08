@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -26,19 +27,53 @@ namespace Structs
         }
 
     }
-    
+
+
+    [Serializable]
+    public struct GridData
+    {
+        public int id;
+        public bool blocked;
+
+        public GridData(GridBlocker blocker)
+        {
+            blocked = blocker.blocked;
+            // id = blocker.GetComponent<UniqueID>().ID;
+            id = blocker.ID;
+        }
+
+        public override bool Equals(object obj)
+        {
+            GridData? item = obj as GridData?;
+
+            if (item == null)
+            {
+                return false;
+            }
+
+            return this.id.Equals(item.Value.id);
+        }
+
+        public override int GetHashCode()
+        {
+            return id.GetHashCode();
+        }
+
+    }
+
+
     [Serializable]
     public struct GoodsContainerData
     {
         public string prefabName;
-        public string gridName;
+        public int gridId;
         public Vector2Int coordinates;
         public Quaternion rotation;
 
         public GoodsContainerData(GoodsContainer goodsContainer)
         {
             prefabName = goodsContainer.ObjectData.prefab.name;
-            gridName = goodsContainer.ConnectedGrid.gameObject.name;
+            gridId = goodsContainer.ConnectedGrid.gridId;
             coordinates = goodsContainer.GridCoordinates;
             rotation = goodsContainer.transform.rotation;
         }
@@ -46,7 +81,8 @@ namespace Structs
         public void Load()
         {
             GameObject placablePrefab = (GameObject)Resources.Load("Placable/" + prefabName);
-            BuildingGrid connectedGrid = GameObject.Find(gridName).GetComponent<BuildingGrid>();
+            int id = this.gridId;
+            BuildingGrid connectedGrid = GameObject.FindObjectsOfType<GridBlocker>(true).Where(gb => gb.ID == id).Single().Grid;
             connectedGrid.PlaceObjectAnew(placablePrefab.GetComponent<GoodsContainer>().ObjectData, coordinates, rotation.eulerAngles.y);
             // GameObject.Instantiate(placablePrefab, position, rotation);
         }
@@ -58,11 +94,13 @@ namespace Structs
     {
         public int money;
         public List<GoodsContainerData> containers;
+        public List<GridData> grids;
         
         public PersistentData()
         {
             money = 500;
             containers = new List<GoodsContainerData>();
+            grids = new List<GridData>();
         }
 
     }

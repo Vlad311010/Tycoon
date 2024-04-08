@@ -15,7 +15,7 @@ public class PersistentDataManager
 
     public static void Save()
     {
-        string dataJson = JsonUtility.ToJson(gameData);
+        string dataJson = JsonUtility.ToJson(gameData, true);
         File.WriteAllText(path, dataJson);
         Debug.Log("Persistent Data Saved");
     }
@@ -27,9 +27,10 @@ public class PersistentDataManager
             gameData = JsonUtility.FromJson<PersistentData>(File.ReadAllText(path));
             Debug.Assert(gameData != null, "Failed to load data");
             Debug.Log("Persistent Data Loaded");
-            IContainPersistentData[] persistentDataContainers = GameObject.FindObjectsOfType<MonoBehaviour>().OfType<IContainPersistentData>().ToArray();
+            IContainPersistentData[] persistentDataContainers = GameObject.FindObjectsOfType<MonoBehaviour>().OfType<IContainPersistentData>().OrderBy(o => o.LoadOrder).ToArray();
             foreach (IContainPersistentData persistentDataContainer in persistentDataContainers) 
             {
+                // Debug.Log((persistentDataContainer as Component).gameObject.name);
                 persistentDataContainer.Load();
             }
 

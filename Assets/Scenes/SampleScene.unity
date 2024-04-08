@@ -410,18 +410,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1470777795}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &281398117 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8790291983651121187, guid: 2a93e83c3a6b82a43b952a62ddcda6f6,
-    type: 3}
-  m_PrefabInstance: {fileID: 1470777795}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 304a0dffb7f3d974b848306bea6d67b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -1149,18 +1137,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1212059096}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &463511733 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8790291983651121187, guid: 2a93e83c3a6b82a43b952a62ddcda6f6,
-    type: 3}
-  m_PrefabInstance: {fileID: 1212059096}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 304a0dffb7f3d974b848306bea6d67b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &483916259
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3770,18 +3746,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1796311338}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1531012842 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8790291983651121187, guid: 2a93e83c3a6b82a43b952a62ddcda6f6,
-    type: 3}
-  m_PrefabInstance: {fileID: 1796311338}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 304a0dffb7f3d974b848306bea6d67b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1542403089
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4431,7 +4395,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2093994429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4451,9 +4415,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 210320fdc451bbb47af92b21be11170c, type: 2}
   customersPool:
   - {fileID: 1744500030}
-  - {fileID: 281398117}
-  - {fileID: 463511733}
-  - {fileID: 1531012842}
 --- !u!4 &2093994430
 Transform:
   m_ObjectHideFlags: 0
@@ -5137,6 +5098,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 40.04032
+      objectReference: {fileID: 0}
+    - target: {fileID: 4558972476454180910, guid: d1a91bc6062fcaf4087cf1a5ef844f5b,
+        type: 3}
+      propertyPath: id
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8495879963678248409, guid: d1a91bc6062fcaf4087cf1a5ef844f5b,
         type: 3}

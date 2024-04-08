@@ -13,6 +13,7 @@ namespace Interfaces
 
     public interface IContainPersistentData
     {
+        public uint LoadOrder { get; }
         public void Save();
         public void Load();
     }

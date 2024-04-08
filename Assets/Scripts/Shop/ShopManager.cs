@@ -10,7 +10,9 @@ public class ShopManager : MonoBehaviour, IContainPersistentData
     public Transform Entrance { get => entrance; }
     public Transform OutOfScreen { get => outOfScreen; }
     public List<GoodsContainer> Containers { get => containers; }
-    
+
+    public uint LoadOrder => 1;
+
     public static ShopManager current;
 
     [SerializeField] Paydesk paydesk;
@@ -67,6 +69,7 @@ public class ShopManager : MonoBehaviour, IContainPersistentData
     public void Save()
     {
         PersistentDataManager.GameData.containers = containers.Select(c => new GoodsContainerData(c)).ToList();
+        PersistentDataManager.Save();
     }
 
     public void Load()

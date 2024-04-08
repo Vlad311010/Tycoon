@@ -6,6 +6,7 @@ using UnityEngine;
 public class BuildingGrid : MonoBehaviour
 {
     public GridSystem<CellData> Grid { get => grid; }
+    public int gridId;
 
     [SerializeField] Vector2Int size;
     [SerializeField] float cellSize;
@@ -26,6 +27,25 @@ public class BuildingGrid : MonoBehaviour
 
         SetUpMesh();
         SetUpCollider();
+
+        GameEvents.current.onBuilingModeEnter += ShowGridMesh;
+        GameEvents.current.onBuilingModeExit += HideGridMesh;
+    }
+
+    private void OnDestroy()
+    {
+        GameEvents.current.onBuilingModeEnter -= ShowGridMesh;
+        GameEvents.current.onBuilingModeExit -= HideGridMesh;
+    }
+
+    private void ShowGridMesh()
+    {
+        gridRender.gameObject.SetActive(true);
+    }
+
+    private void HideGridMesh()
+    {
+        gridRender.gameObject.SetActive(false);
     }
 
     private void SetUpMesh()

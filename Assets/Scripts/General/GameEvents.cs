@@ -15,7 +15,6 @@ public class GameEvents : MonoBehaviour
         if (onGoodsContainerPlaced != null)
         {
             onGoodsContainerPlaced(container);
-            PersistentDataManager.Save();
         }
     }
 
@@ -25,7 +24,6 @@ public class GameEvents : MonoBehaviour
         if (onGoodsContainerRemoved != null)
         {
             onGoodsContainerRemoved(container);
-            PersistentDataManager.Save();
         }
     }
 

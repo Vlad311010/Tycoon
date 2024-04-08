@@ -1,17 +1,40 @@
 using Interfaces;
+using Structs;
+using System.Linq;
 using UnityEngine;
 
-public class GridBlocker : MonoBehaviour, IClickable
+public class GridBlocker : MonoBehaviour, IClickable, IContainPersistentData
 {
+    public int ID => id;
+    public BuildingGrid Grid { get => grid; }
+
     [SerializeField] BuildingGrid grid;
     [SerializeField] string popupWindowText;
+    [SerializeField] int id;
 
-    [SerializeField]  bool blocked = true;
+    public bool blocked = true;
+
+    public uint LoadOrder { get => 0; }
 
     private void Awake()
     {
-        if (!blocked)
-            Remove();
+        grid.gridId = id;
+        // init save data
+        GridData gridData = new Structs.GridData(this);
+        if (!PersistentDataManager.GameData.grids.Contains(gridData))
+        {
+            PersistentDataManager.GameData.grids.Add(gridData);
+            PersistentDataManager.Save();
+            if (!blocked)
+            {
+                Remove();
+            }
+        }
+    }
+
+    private void OnLoad()
+    {
+
     }
 
     public void Remove()
@@ -19,10 +42,36 @@ public class GridBlocker : MonoBehaviour, IClickable
         blocked = false;
         grid.gameObject.SetActive(true);
         gameObject.SetActive(false);
+        Save();
     }
 
     public void OnClick()
     {
         GameEvents.current.PopupWindowCall(popupWindowText, () => Remove());
+    }
+
+    public void Save()
+    {
+        Debug.Log("Save");
+
+        GridData gridData = new Structs.GridData(this);
+        if (PersistentDataManager.GameData.grids.Contains(gridData))
+        {
+            PersistentDataManager.GameData.grids.Remove(gridData);
+        }
+        PersistentDataManager.GameData.grids.Add(gridData);
+        PersistentDataManager.Save();
+    }
+
+    public void Load()
+    {
+        Debug.Log("Load");
+        // GridData? gridData = new Structs.GridData(this);
+        GridData? gridData = PersistentDataManager.GameData.grids.Where(g => g.id == this.id).SingleOrDefault();
+
+        if (!gridData.Value.blocked)
+        {
+            Remove();
+        }
     }
 }

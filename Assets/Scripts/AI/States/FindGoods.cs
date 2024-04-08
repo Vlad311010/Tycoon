@@ -20,6 +20,10 @@ public class FindGoods : State
             
     }
 
+    public override void OnStateExit(AICore core)
+    {
+    }
+
 
     private bool CanBuyMore(int availableMoney, int mood)
     {

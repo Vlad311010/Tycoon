@@ -705,7 +705,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 2455397776986652981}
   m_Enabled: 0
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.2
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -733,8 +733,6 @@ MonoBehaviour:
   floorLayerMask:
     serializedVersion: 2
     m_Bits: 8
-  follow: {fileID: 0}
-  customerData: {fileID: 11400000, guid: 210320fdc451bbb47af92b21be11170c, type: 2}
   currentState: {fileID: 4108812499098939641}
   isActive: 0
   rotateTowardWaypoint: 1

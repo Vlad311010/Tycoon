@@ -1,6 +1,7 @@
 using Interfaces;
 using System;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -43,7 +44,12 @@ public class AICore : MonoBehaviour
 
         if (rotateTowardWaypoint)
         {
-            Vector3 lookAtPosition = agent.path.corners.Length > 1 ? agent.path.corners[1] : lookAt.position;
+            Vector3 lookAtPosition = transform.forward;
+            if (agent.path.corners.Length > 1)
+                lookAtPosition = agent.path.corners[1];
+            else if (lookAt != null)
+                lookAtPosition = lookAt.position;
+
             AIGeneral.LookAt(transform, lookAtPosition, agent.angularSpeed);
         }
 
@@ -72,9 +78,17 @@ public class AICore : MonoBehaviour
         if (currentState != newState)
         {
             Debug.Log(currentState .ToString() + " -> " + newState.ToString());
+            currentState.OnStateExit(this);
             currentState = newState;
             newState.OnStateEnter(this);
         }
+    }
+
+    public void ForceStateChange(State newState)
+    {
+        currentState.OnStateExit(this);
+        currentState = newState;
+        newState.OnStateEnter(this);
     }
 
     public void Interact(float time, IInteractable interactable, Action<AICore> action)
