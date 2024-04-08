@@ -24,4 +24,10 @@ public class CustomerSO : ScriptableObject
         customerData.money = customerSO.initMoney;
         return customerData;
     }
+
+    public void OnInteraction(PlaceableSO placeableSO)
+    {
+        mood -= placeableSO.moodDecreasePerInteraction;
+        goodsCost -= placeableSO.goodsCost;
+    }
 }

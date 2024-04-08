@@ -9,7 +9,7 @@ public class GridBlocker : MonoBehaviour, IClickable, IContainPersistentData
     public BuildingGrid Grid { get => grid; }
 
     [SerializeField] BuildingGrid grid;
-    [SerializeField] string popupWindowText;
+    [SerializeField][TextArea] string popupWindowText;
     [SerializeField] int id;
 
     public bool blocked = true;

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3967867473338815172}
   - component: {fileID: 662025948435173323}
   - component: {fileID: 4558972476454180910}
-  - component: {fileID: 132630933162306951}
   m_Layer: 8
   m_Name: Blocker
   m_TagString: Untagged
@@ -61,20 +60,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: {fileID: 8495879963678248409}
-  popupWindowText: 
+  popupWindowText: 'Do you want to remove obstacle?
+
+    (Require 1 cleaninig tool)'
+  id: 0
   blocked: 1
---- !u!114 &132630933162306951
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 772138235875807803}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b6b1a081fecac04dabbea1b06ff37ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8712624735567285280
 GameObject:
   m_ObjectHideFlags: 0

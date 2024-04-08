@@ -64,10 +64,12 @@ public class ShopManager : MonoBehaviour, IContainPersistentData
         money = System.Math.Clamp(money + amount, 0, int.MaxValue);
         GameEvents.current.CustomerPays(money);
         GameEvents.current.MoneyAmountChange(money, amount);
+        Save();
     }
 
     public void Save()
     {
+        PersistentDataManager.GameData.money = money;
         PersistentDataManager.GameData.containers = containers.Select(c => new GoodsContainerData(c)).ToList();
         PersistentDataManager.Save();
     }

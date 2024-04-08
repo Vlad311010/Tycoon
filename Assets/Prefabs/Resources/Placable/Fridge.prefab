@@ -47,9 +47,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14575ee0daf45244482e66fa97fdff4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactionPoint: {fileID: 8920278865711965979}
   objectData: {fileID: 11400000, guid: b4e3b87c89f8c5146be65a6c4e8cc43f, type: 2}
   lookAt: {fileID: 3274982595456869714}
+  interactionZoneAnchor: {fileID: 8920278865711965979}
+  interactionZoneSize: {x: 1.6, y: 1.4}
   interacionTime: {x: 1, y: 2}
 --- !u!1 &2566736672382253658
 GameObject:
@@ -106,7 +107,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4556817711192650043}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: 0, z: 1}
+  m_LocalPosition: {x: 1, y: 0, z: -0.464}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

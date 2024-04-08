@@ -131,7 +131,6 @@ public static class AIGeneral
     {
         path = new NavMeshPath();
         return agent.CalculatePath(point, path) && path.status == NavMeshPathStatus.PathComplete;
-
     }
 }
 

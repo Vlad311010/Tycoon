@@ -1,9 +1,11 @@
 using Interfaces;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class AICore : MonoBehaviour
 {
@@ -107,6 +109,14 @@ public class AICore : MonoBehaviour
     {
         interactable.Interact(this);
     }
+
+    public IEnumerable<GoodsContainer> AvailableGoodsContainers(int availableMoney, int mood)
+    {
+        return ShopManager.current.Containers
+            .Where(
+            c => c.ItemMinimalPrice() <= availableMoney 
+            && AIGeneral.PointIsReachable(agent, c.transform.position, out UnityEngine.AI.NavMeshPath path));
+    } 
 
 
 

@@ -13,6 +13,7 @@ public class PlaceableSO : ScriptableObject
     public string description;
     public int price;
     public int goodsCost;
+    public int moodDecreasePerInteraction;
 
 
 

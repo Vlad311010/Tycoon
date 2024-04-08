@@ -8,6 +8,9 @@ public class CameraController : MonoBehaviour
     [SerializeField] float rotationSpeed;
     [SerializeField] float zoomSpeed;
     [SerializeField] Vector2 YLimits;
+    [SerializeField] Vector3 anchor;
+    [SerializeField] float XLimit;
+    [SerializeField] float ZLimit;
 
 
     private Vector3 movementDirection;
@@ -42,7 +45,11 @@ public class CameraController : MonoBehaviour
         Vector3 relativeDirection = transform.rotation * direction;
         relativeDirection.y = 0;
 
-        transform.position += relativeDirection * movementSpeed * Time.deltaTime;
+        Vector3 newPosition = transform.position + relativeDirection * movementSpeed * Time.deltaTime;
+        newPosition.x = Mathf.Clamp(newPosition.x, anchor.x - XLimit, anchor.z + XLimit);
+        newPosition.z = Mathf.Clamp(newPosition.z, anchor .z - ZLimit, anchor.z + ZLimit);
+        
+        transform.position = newPosition;
     }
 
     public void Rotate(float direction)

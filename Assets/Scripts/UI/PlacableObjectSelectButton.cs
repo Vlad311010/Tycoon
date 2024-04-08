@@ -6,6 +6,7 @@ public class PlacableObjectSelectButton : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] PlaceableSO objectData;
     [SerializeField] TMP_Text priceText;
+    [SerializeField] TMP_Text nameText;
 
     [SerializeField] Color priceColorPositive;
     [SerializeField] Color priceColorNegative;
@@ -13,6 +14,7 @@ public class PlacableObjectSelectButton : MonoBehaviour, IPointerClickHandler
     private void Awake()
     {
         priceText.text = objectData.price.ToString() + "$";
+        nameText.text = objectData.name;
 
         GameEvents.current.onMoneyAmountChange += UpdateUI;
     }
