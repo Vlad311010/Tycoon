@@ -18,12 +18,14 @@ public class SettingsWindow : MonoBehaviour
     private void MovementSpeedChange(float value)
     {
         PersistentDataManager.GameData.CameraMovementSpeed = (int)value;
+        GameEvents.current.CameraSettingsChange();
         PersistentDataManager.Save();
     }
 
     private void RotationSpeedChange(float value)
     {
         PersistentDataManager.GameData.CameraRotationSpeed = (int)value;
+        GameEvents.current.CameraSettingsChange();
         PersistentDataManager.Save();
     }
 

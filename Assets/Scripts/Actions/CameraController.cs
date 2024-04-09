@@ -20,6 +20,18 @@ public class CameraController : MonoBehaviour
 
     private void Awake()
     {
+        UpdateCameraSettings();
+
+        GameEvents.current.onCameraSettingsChange += UpdateCameraSettings;
+    }
+
+    private void OnDestroy()
+    {
+        GameEvents.current.onCameraSettingsChange -= UpdateCameraSettings;
+    }
+
+    private void UpdateCameraSettings()
+    {
         movementSpeed = PersistentDataManager.GameData.CameraMovementSpeed;
         rotationSpeed = PersistentDataManager.GameData.CameraRotationSpeed;
     }

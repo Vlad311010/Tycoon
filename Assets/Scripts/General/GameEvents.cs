@@ -82,4 +82,13 @@ public class GameEvents : MonoBehaviour
         }
     }
 
+    public event Action onCameraSettingsChange;
+    public void CameraSettingsChange()
+    {
+        if (onCameraSettingsChange != null)
+        {
+            onCameraSettingsChange();
+        }
+    }
+
 }
