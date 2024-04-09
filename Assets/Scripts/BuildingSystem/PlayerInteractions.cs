@@ -111,7 +111,6 @@ public class PlayerInteractions : MonoBehaviour
             BuildingGrid grid = gridCollider.GetComponent<BuildingGrid>();
             if (grid.PlaceObject(objectToPlace, mousePos, placingRotation, out GameObject placedGO))
             {
-                ShopManager.current.AddMoney(-objectToPlace.price);
                 GoodsContainer container = placedGO.GetComponent<GoodsContainer>();
                 Debug.Assert(container != null, "Placable object prefab does not contaion GoodsContainer script");
             }
@@ -130,7 +129,6 @@ public class PlayerInteractions : MonoBehaviour
 
     private void RemoveCall(Vector3 mousePos, BuildingGrid grid)
     {
-        ShopManager.current.AddMoney(objectToPlace.price);
         grid.RemoveObject(mousePos);
     }
 

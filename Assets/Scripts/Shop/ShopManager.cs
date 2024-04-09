@@ -53,12 +53,14 @@ public class ShopManager : MonoBehaviour, IContainPersistentData
 
     private void AddGoodsContainer(GoodsContainer container)
     {
+        ShopManager.current.AddMoney(-container.ObjectData.price);
         containers.Add(container);
         Save();
     }
 
     private void RemoveGoodsContainer(GoodsContainer container)
     {
+        ShopManager.current.AddMoney(container.ObjectData.price);
         containers.Remove(container);
         Save();
     }
