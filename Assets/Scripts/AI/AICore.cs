@@ -79,7 +79,7 @@ public class AICore : MonoBehaviour
     {
         if (currentState != newState)
         {
-            Debug.Log(currentState .ToString() + " -> " + newState.ToString());
+            // Debug.Log(currentState .ToString() + " -> " + newState.ToString());
             currentState.OnStateExit(this);
             currentState = newState;
             newState.OnStateEnter(this);
@@ -110,7 +110,7 @@ public class AICore : MonoBehaviour
         interactable.Interact(this);
     }
 
-    public IEnumerable<GoodsContainer> AvailableGoodsContainers(int availableMoney, int mood)
+    public IEnumerable<GoodsContainer> AvailableGoodsContainers(int availableMoney)
     {
         return ShopManager.current.Containers
             .Where(

@@ -88,20 +88,53 @@ namespace Structs
         }
     }
 
+    [Serializable]
+    public class SettingsData
+    {
+        public int cameraMovementSpeed;
+        public int cameraRotationSpeed;
+
+        public SettingsData()
+        {
+            cameraMovementSpeed = 20;
+            cameraRotationSpeed = 120;
+        }
+
+        public SettingsData(SettingsData settings)
+        {
+            cameraMovementSpeed = settings.cameraMovementSpeed;
+            cameraRotationSpeed = settings.cameraRotationSpeed;
+        }
+    }
+
+
 
     [Serializable]
     public class PersistentData
     {
+        public SettingsData settings;
         public int money;
         public List<GoodsContainerData> containers;
         public List<GridData> grids;
         
         public PersistentData()
         {
+            settings = new SettingsData();
             money = 500;
             containers = new List<GoodsContainerData>();
             grids = new List<GridData>();
         }
+
+        public PersistentData(SettingsData settings)
+        {
+            this.settings = new SettingsData(settings);
+            money = 500;
+            containers = new List<GoodsContainerData>();
+            grids = new List<GridData>();
+        }
+
+        public int CameraMovementSpeed { get => settings.cameraMovementSpeed; set => settings.cameraMovementSpeed = value; }
+        public int CameraRotationSpeed { get => settings.cameraRotationSpeed; set => settings.cameraRotationSpeed = value; }
 
     }
 

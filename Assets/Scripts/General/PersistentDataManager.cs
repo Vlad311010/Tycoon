@@ -17,20 +17,20 @@ public class PersistentDataManager
     {
         string dataJson = JsonUtility.ToJson(gameData, true);
         File.WriteAllText(path, dataJson);
-        Debug.Log("Persistent Data Saved");
+        // Debug.Log("Persistent Data Saved");
     }
 
     public static PersistentData Load()
     {
+        Debug.Log(GameDataAvailable());
         if (File.Exists(path))
         {
             gameData = JsonUtility.FromJson<PersistentData>(File.ReadAllText(path));
             Debug.Assert(gameData != null, "Failed to load data");
-            Debug.Log("Persistent Data Loaded");
+            // Debug.Log("Persistent Data Loaded");
             IContainPersistentData[] persistentDataContainers = GameObject.FindObjectsOfType<MonoBehaviour>().OfType<IContainPersistentData>().OrderBy(o => o.LoadOrder).ToArray();
             foreach (IContainPersistentData persistentDataContainer in persistentDataContainers) 
             {
-                // Debug.Log((persistentDataContainer as Component).gameObject.name);
                 persistentDataContainer.Load();
             }
 
@@ -42,10 +42,27 @@ public class PersistentDataManager
         }
     }
 
-    private static PersistentData CreateInitialData()
+    public static bool GameDataAvailable()
     {
-        gameData = new PersistentData();
-        Debug.Log("Persistent Data Initiated");
+        if (!File.Exists(path)) return false;
+
+        gameData = JsonUtility.FromJson<PersistentData>(File.ReadAllText(path));
+        return gameData.grids.Count > 0;
+    }
+
+    public static PersistentData CreateInitialData()
+    {
+        if (!File.Exists(path)) // create data first time
+        {
+            gameData = new PersistentData();
+            // Debug.Log("Persistent Data Initiated");
+        }
+        else // create data but keep settins data
+        {
+            gameData = JsonUtility.FromJson<PersistentData>(File.ReadAllText(path));
+            gameData = new PersistentData(gameData.settings);
+            // Debug.Log("Persistent Data Reinitiated");
+        }
         Save();
 
         return gameData;

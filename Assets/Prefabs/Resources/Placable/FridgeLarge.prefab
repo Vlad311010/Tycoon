@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 773723952283631048}
   - component: {fileID: 3191701845613850237}
   - component: {fileID: 3724278583056908374}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: doorLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8794338436763475301}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: FridgeLarge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -127,7 +127,7 @@ GameObject:
   - component: {fileID: 2054614276686970733}
   - component: {fileID: 2660439970589290429}
   - component: {fileID: 1907155775057413273}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: doorRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -211,7 +211,7 @@ GameObject:
   - component: {fileID: 7041139389717540713}
   - component: {fileID: 6203987133109166284}
   - component: {fileID: 8213450972400194566}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}

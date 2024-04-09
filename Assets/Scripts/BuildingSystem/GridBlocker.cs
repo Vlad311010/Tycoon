@@ -11,12 +11,19 @@ public class GridBlocker : MonoBehaviour, IClickable, IContainPersistentData
     [SerializeField] BuildingGrid grid;
     [SerializeField][TextArea] string popupWindowText;
     [SerializeField] int id;
+    
 
     public bool blocked = true;
 
     public uint LoadOrder { get => 0; }
 
+
     private void Awake()
+    {
+        LoadGameData();
+    }
+
+    public void LoadGameData()
     {
         grid.gridId = id;
         // init save data
@@ -30,11 +37,15 @@ public class GridBlocker : MonoBehaviour, IClickable, IContainPersistentData
                 Remove();
             }
         }
-    }
-
-    private void OnLoad()
-    {
-
+        else
+        {
+            int idx = PersistentDataManager.GameData.grids.IndexOf(gridData);
+            blocked = PersistentDataManager.GameData.grids[idx].blocked;
+            if (!blocked)
+            {
+                Remove();
+            }
+        }
     }
 
     public void Remove()
@@ -45,14 +56,19 @@ public class GridBlocker : MonoBehaviour, IClickable, IContainPersistentData
         Save();
     }
 
-    public void OnClick()
+    public void OnLeftClick()
     {
-        GameEvents.current.PopupWindowCall(popupWindowText, () => Remove());
+        Debug.Log("Window popup Open");
+        GameEvents.current.PopupWindowCall(popupWindowText, true, true, () => Remove());
     }
 
+    public void OnRightClick()
+    {
+        // show object info
+    }
+    
     public void Save()
     {
-        Debug.Log("Save");
 
         GridData gridData = new Structs.GridData(this);
         if (PersistentDataManager.GameData.grids.Contains(gridData))
@@ -65,8 +81,6 @@ public class GridBlocker : MonoBehaviour, IClickable, IContainPersistentData
 
     public void Load()
     {
-        Debug.Log("Load");
-        // GridData? gridData = new Structs.GridData(this);
         GridData? gridData = PersistentDataManager.GameData.grids.Where(g => g.id == this.id).SingleOrDefault();
 
         if (!gridData.Value.blocked)

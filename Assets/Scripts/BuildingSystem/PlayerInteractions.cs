@@ -1,7 +1,6 @@
 using Interfaces;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static BuildingGrid;
 
 public class PlayerInteractions : MonoBehaviour
 {
@@ -9,6 +8,8 @@ public class PlayerInteractions : MonoBehaviour
 
     [SerializeField] LayerMask gridLayerMask;
     [SerializeField] LayerMask blockerLayerMask;
+    [SerializeField] LayerMask containersLayerMask;
+
     [SerializeField] Material positive;
     [SerializeField] Material negative;
 
@@ -42,35 +43,6 @@ public class PlayerInteractions : MonoBehaviour
 
         if (showPreview)
             ShowPreview();
-        /*if (isInBuildingMode)
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                Build();
-            }
-            else if (Input.GetMouseButtonDown(1))
-            {
-                Remove();
-            }
-            
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                placingRotation = (placingRotation + 90f) % 360;
-            }
-
-            ShowPreview();
-        }
-        else
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                OnLeftClick();
-            }
-            else if (Input.GetMouseButtonDown(1))
-            {
-                OnRightClick();
-            }
-        }*/
     }
 
     private void ChangePlacableObject(PlaceableSO objectData)
@@ -141,17 +113,17 @@ public class PlayerInteractions : MonoBehaviour
         {
             BuildingGrid grid = gridCollider.GetComponent<BuildingGrid>();
             if (!grid.CellIsEmpty(mousePos))
-                GameEvents.current.PopupWindowCall("Are you sure you want to sell this object", () => grid.RemoveObject(mousePos));
+                GameEvents.current.PopupWindowCall("Are you sure you want to sell this object", true, true, () => grid.RemoveObject(mousePos));
         }
     }
 
     public void OnLeftClick(InputAction.CallbackContext ctx)
     {
-        if (Utils.GetMouseWorldPositionRaycast(out Vector3 mousePos, blockerLayerMask, out Collider collider))
+        if (Utils.GetMouseWorldPositionRaycast(out Vector3 mousePos, blockerLayerMask | containersLayerMask, out Collider collider))
         {
             if (collider.TryGetComponent(out IClickable clickable))
             {
-                clickable.OnClick();
+                clickable.OnLeftClick();
             }
         }
     }
@@ -159,5 +131,16 @@ public class PlayerInteractions : MonoBehaviour
     public void OnRightClick(InputAction.CallbackContext ctx)
     {
 
+    }
+
+    public void OnMouseMovement(InputAction.CallbackContext ctx)
+    {
+        /*if (Utils.GetMouseWorldPositionRaycast(out Vector3 mousePos, blockerLayerMask | containersLayerMask, out Collider collider))
+        {
+            if (collider.TryGetComponent(out IClickable clickable))
+            {
+                clickable.OnMouseHover();
+            }
+        }*/
     }
 }

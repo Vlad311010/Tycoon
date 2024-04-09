@@ -55,12 +55,12 @@ public class GameEvents : MonoBehaviour
 
     }
 
-    public event Action<string, Action> onPopupWindowCall;
-    public void PopupWindowCall(string text, Action okBtnAction)
+    public event Action<string, bool, bool, Action> onPopupWindowCall;
+    public void PopupWindowCall(string text, bool textAlingCenter, bool confirmationWindow, Action okBtnAction)
     {
         if (onPopupWindowCall != null)
         {
-            onPopupWindowCall(text, okBtnAction);
+            onPopupWindowCall(text, textAlingCenter, confirmationWindow,  okBtnAction);
         }
     }
 

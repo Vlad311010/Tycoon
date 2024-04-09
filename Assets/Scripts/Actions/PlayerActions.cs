@@ -44,18 +44,20 @@ public class PlayerActions : MonoBehaviour
 
         control.Gameplay.LeftClick.performed -= playerInteractions.OnLeftClick;
         control.Gameplay.RightClick.performed -= playerInteractions.OnRightClick;
+        control.Gameplay.MouseMove.performed -= playerInteractions.OnMouseMovement;
     }
 
     private void ExitBuildingMode()
     {
         control.Gameplay.LeftClick.performed += playerInteractions.OnLeftClick;
         control.Gameplay.RightClick.performed += playerInteractions.OnRightClick;
+        control.Gameplay.MouseMove.performed += playerInteractions.OnMouseMovement;
 
         control.Gameplay.LeftClick.performed -= playerInteractions.Build;
         control.Gameplay.RightClick.performed -= playerInteractions.Remove;
     }
 
-    public static void MouseInteractionSetActive(bool active)
+    public void MouseInteractionSetActive(bool active)
     {
         if (active)
         {

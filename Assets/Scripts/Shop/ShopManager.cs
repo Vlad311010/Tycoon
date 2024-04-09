@@ -22,12 +22,13 @@ public class ShopManager : MonoBehaviour, IContainPersistentData
     List<GoodsContainer> containers;
 
     private int money;
-    private int improvmentTools;
+    private int upgradeTools;
     private int cleaningTools;
 
     private void Awake()
     {
         current = this;
+        PersistentDataManager.Load();
         money = PersistentDataManager.GameData.money;
         
         GameEvents.current.onGoodsContainerPlaced += AddGoodsContainer;

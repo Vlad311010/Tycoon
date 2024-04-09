@@ -4,17 +4,25 @@ using UnityEngine.InputSystem;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] float movementSpeed;
-    [SerializeField] float rotationSpeed;
     [SerializeField] float zoomSpeed;
     [SerializeField] Vector2 YLimits;
     [SerializeField] Vector3 anchor;
     [SerializeField] float XLimit;
     [SerializeField] float ZLimit;
 
+    // parameters
+    private float movementSpeed;
+    private float rotationSpeed;
 
+    
     private Vector3 movementDirection;
     private float rotationDirection;
+
+    private void Awake()
+    {
+        movementSpeed = PersistentDataManager.GameData.CameraMovementSpeed;
+        rotationSpeed = PersistentDataManager.GameData.CameraRotationSpeed;
+    }
 
     private void Update()
     {

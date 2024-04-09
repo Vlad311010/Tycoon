@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a7a7cee9c4ea30469970056fe967160, type: 3}
   m_Name: Shelves
   m_EditorClassIdentifier: 
-  preview: {fileID: 1316275196339401820, guid: 6662fb42785c02f4b9dd2e49e17ce263, type: 3}
-  prefab: {fileID: 1316275196339401820, guid: 6662fb42785c02f4b9dd2e49e17ce263, type: 3}
+  preview: {fileID: 9087425125152761539, guid: 625c29bc449c9164c9a71f817d8c631e, type: 3}
+  prefab: {fileID: 9087425125152761539, guid: d7d85ac7dc7bb704ea11fd7b8c0841ac, type: 3}
   extents: {x: 2, y: 1}
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 29a5b8aa74496bd42b00853edd460800, type: 3}
   description: Fridge Description
-  price: 100
-  goodsCost: 50
+  price: 600
+  goodsCost: 90
+  moodDecreasePerInteraction: 7

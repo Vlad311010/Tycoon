@@ -10,7 +10,7 @@ public class CustomerSO : ScriptableObject
     [SerializeField] private int initMood;
     [SerializeField] private int initMoney;
 
-    public int goodsCost;
+    [HideInInspector] public int goodsCost;
 
     private int mood;
     private int money;
@@ -27,7 +27,7 @@ public class CustomerSO : ScriptableObject
 
     public void OnInteraction(PlaceableSO placeableSO)
     {
+        goodsCost += placeableSO.goodsCost;
         mood -= placeableSO.moodDecreasePerInteraction;
-        goodsCost -= placeableSO.goodsCost;
     }
 }

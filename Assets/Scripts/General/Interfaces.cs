@@ -8,7 +8,9 @@ namespace Interfaces
 
     public interface IClickable
     {
-        public void OnClick();
+        public void OnLeftClick();
+        public void OnRightClick();
+        // public void OnMouseHover();
     }
 
     public interface IContainPersistentData

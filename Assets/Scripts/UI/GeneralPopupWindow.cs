@@ -8,6 +8,7 @@ public class GeneralPopupWindow : MonoBehaviour
     [SerializeField] TMP_Text text;
     [SerializeField] Button okButton;
     [SerializeField] Button cancelButton;
+    [SerializeField] Button singleModButton;
 
     private WindowUI windowUI;
     private WindowsController windowsController;
@@ -18,6 +19,8 @@ public class GeneralPopupWindow : MonoBehaviour
         windowsController = GetComponentInParent<WindowsController>();
         GameEvents.current.onPopupWindowCall += CallPopupWindow;
         gameObject.SetActive(false);
+        
+        singleModButton.onClick.AddListener(() => windowsController.CloseWindow());
     }
 
     private void OnDisable()
@@ -26,12 +29,30 @@ public class GeneralPopupWindow : MonoBehaviour
         cancelButton.onClick.RemoveAllListeners();
     }
 
-    public void CallPopupWindow(string text, Action okBtnAction)
+    public void CallPopupWindow(string windowText, bool textAlingCenter, bool confirmationWindow, Action okBtnAction)
     {
+        if (gameObject.activeSelf) return;
+
         GetComponentInParent<WindowsController>().OpenWindow(windowUI);
-        SetText(text);
-        SetOkBtnFunction(okBtnAction);
-        SetCancelBtnDefaultFunction();
+        
+        text.alignment = textAlingCenter ? TextAlignmentOptions.CenterGeoAligned : TextAlignmentOptions.TopLeft;
+
+        SetText(windowText);
+        if (confirmationWindow)
+        {
+            okButton.gameObject.SetActive(true);
+            cancelButton.gameObject.SetActive(true);
+            singleModButton.gameObject.SetActive(false);
+
+            SetOkBtnFunction(okBtnAction);
+            SetCancelBtnDefaultFunction();
+        }
+        else
+        {
+            okButton.gameObject.SetActive(false);
+            cancelButton.gameObject.SetActive(false);
+            singleModButton.gameObject.SetActive(true);
+        }
     }
 
     public void SetText(string txt)

@@ -33,7 +33,7 @@ public class GetGoods : State
         goodsTaken = false;
         atDestinationPoint = false;
         interactionIsActive = false;
-        target = SelectContainer(core.CustomerData.Money - core.CustomerData.goodsCost, core.CustomerData.Mood, core);
+        target = SelectContainer(core.CustomerData.Money - core.CustomerData.goodsCost, core);
         
         AIGeneral.CreatePath(core.Agent, target.RandomInteractionPoint());
     }
@@ -67,9 +67,9 @@ public class GetGoods : State
         GameEvents.current.onGoodsContainerRemoved -= Reselect;
     }
 
-    private GoodsContainer SelectContainer(int availableMoney, int mood, AICore core)
+    private GoodsContainer SelectContainer(int availableMoney, AICore core)
     {
-        List<GoodsContainer> containers = core.AvailableGoodsContainers(availableMoney, mood).ToList();
+        List<GoodsContainer> containers = core.AvailableGoodsContainers(availableMoney).ToList();
 
         if (containers.Count > 0)
             return containers.RandomChoice();

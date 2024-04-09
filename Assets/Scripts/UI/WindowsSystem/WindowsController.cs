@@ -1,19 +1,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.InputSystem.DefaultInputActions;
 
-public class WindowsController : MonoBehaviour
+public abstract class WindowsController : MonoBehaviour
 {
     [SerializeField] WindowUI mainWindow;
     [SerializeField] bool mainWindowStartActive = false;
 
-    private DefaultControls control;
+    DefaultControls control;
+    PlayerActions playerActions;
 
     // state
     private Stack<WindowUI> windowsStack = new Stack<WindowUI>();
 
     protected virtual void Awake()
     {
+        playerActions = GameObject.FindObjectOfType<PlayerActions>();
+
         control = new DefaultControls();
         control.Enable();
 
@@ -42,12 +46,13 @@ public class WindowsController : MonoBehaviour
     {
         if (window == null) return;
 
+
         if (windowsStack.Count > 0)
             windowsStack.Peek()?.SetActive(false);
 
-        PlayerActions.MouseInteractionSetActive(false);
         windowsStack.Push(window);
         window.OpenWindow();
+        playerActions?.MouseInteractionSetActive(false);
     }
 
     public void CloseWindow(bool bckButton = false)
@@ -58,7 +63,7 @@ public class WindowsController : MonoBehaviour
         else
         {
             SceneController.Resume();
-            PlayerActions.MouseInteractionSetActive(true);
+            playerActions?.MouseInteractionSetActive(true);
         }
 
     }

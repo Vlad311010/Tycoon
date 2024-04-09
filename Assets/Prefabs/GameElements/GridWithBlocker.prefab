@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3967867473338815172}
   - component: {fileID: 662025948435173323}
   - component: {fileID: 4558972476454180910}
+  - component: {fileID: 5028548923695222302}
   m_Layer: 8
   m_Name: Blocker
   m_TagString: Untagged
@@ -65,6 +66,19 @@ MonoBehaviour:
     (Require 1 cleaninig tool)'
   id: 0
   blocked: 1
+--- !u!114 &5028548923695222302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 772138235875807803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e4d404210a51b04d9c88b19c16a92fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightMaterial: {fileID: 2100000, guid: 6b34a5b0fffd6b44386a7d1ad44e2203, type: 2}
 --- !u!1 &8712624735567285280
 GameObject:
   m_ObjectHideFlags: 0

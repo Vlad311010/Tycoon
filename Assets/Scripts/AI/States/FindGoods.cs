@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public class FindGoods : State
 {
@@ -15,9 +16,9 @@ public class FindGoods : State
     {
         if (CanBuyMore(core.CustomerData.Money - core.CustomerData.goodsCost, core.CustomerData.Mood, core))
             return getGoods;
-        else
+        else 
             return core.CustomerData.goodsCost > 0 ? pay : exit;
-            
+
     }
 
     public override void OnStateExit(AICore core)
@@ -27,8 +28,10 @@ public class FindGoods : State
 
     private bool CanBuyMore(int availableMoney, int mood, AICore core)
     {
-        if (mood <= 0) return false;
-        List<GoodsContainer> containers = core.AvailableGoodsContainers(availableMoney, mood).ToList();
+        if (mood <= 0)
+            return false;
+
+        List<GoodsContainer> containers = core.AvailableGoodsContainers(availableMoney).ToList();
         // IEnumerable<GoodsContainer> containers = ShopManager.current.Containers.Where(c => c.ItemMinimalPrice() <= availableMoney);
         return containers.Count() > 0;
     }
