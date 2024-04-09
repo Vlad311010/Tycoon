@@ -114,6 +114,7 @@ namespace Structs
     {
         public SettingsData settings;
         public int money;
+        public int cleaningTools;
         public List<GoodsContainerData> containers;
         public List<GridData> grids;
         
@@ -121,6 +122,7 @@ namespace Structs
         {
             settings = new SettingsData();
             money = 500;
+            cleaningTools = 2;
             containers = new List<GoodsContainerData>();
             grids = new List<GridData>();
         }
@@ -129,6 +131,7 @@ namespace Structs
         {
             this.settings = new SettingsData(settings);
             money = 500;
+            cleaningTools = 2;
             containers = new List<GoodsContainerData>();
             grids = new List<GridData>();
         }

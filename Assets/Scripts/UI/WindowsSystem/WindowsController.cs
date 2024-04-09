@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEngine.InputSystem.DefaultInputActions;
 
 public abstract class WindowsController : MonoBehaviour
 {
@@ -57,7 +56,7 @@ public abstract class WindowsController : MonoBehaviour
 
     public void CloseWindow(bool bckButton = false)
     {
-        windowsStack.Pop().CloseWindow(false);
+        windowsStack.Pop().CloseWindow(bckButton);
         if (windowsStack.Count > 0)
             windowsStack.Peek().SetActive(true);
         else

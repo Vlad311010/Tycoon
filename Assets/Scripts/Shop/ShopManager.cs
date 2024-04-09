@@ -22,7 +22,6 @@ public class ShopManager : MonoBehaviour, IContainPersistentData
     List<GoodsContainer> containers;
 
     private int money;
-    private int upgradeTools;
     private int cleaningTools;
 
     private void Awake()
@@ -30,17 +29,27 @@ public class ShopManager : MonoBehaviour, IContainPersistentData
         current = this;
         PersistentDataManager.Load();
         money = PersistentDataManager.GameData.money;
-        
+        cleaningTools = PersistentDataManager.GameData.cleaningTools;
+
+
         GameEvents.current.onGoodsContainerPlaced += AddGoodsContainer;
         GameEvents.current.onGoodsContainerRemoved += RemoveGoodsContainer;
+    }
+
+    private void OnDestroy()
+    {
+        GameEvents.current.onGoodsContainerPlaced -= AddGoodsContainer;
+        GameEvents.current.onGoodsContainerRemoved -= RemoveGoodsContainer;
     }
 
     private void Start()
     {
         containers = new List<GoodsContainer>();
         containers.AddRange(GameObject.FindObjectsOfType<GoodsContainer>());
+        Debug.Log(containers.Count);
 
         GameEvents.current.MoneyAmountChange(money, 0);
+        GameEvents.current.CleaningToolUsage(cleaningTools);
     }
 
     private void AddGoodsContainer(GoodsContainer container)
@@ -55,7 +64,7 @@ public class ShopManager : MonoBehaviour, IContainPersistentData
         Save();
     }
 
-    private bool HaveEnoughMoney(int required)
+    public bool HaveEnoughMoney(int required)
     {
         return money >= required;
     }
@@ -68,9 +77,23 @@ public class ShopManager : MonoBehaviour, IContainPersistentData
         Save();
     }
 
+    public void UseCleaninigTool()
+    {
+        cleaningTools--;
+        GameEvents.current.CleaningToolUsage(cleaningTools);
+        Save();
+    }
+
+    public bool PossessesCleaningTool()
+    {
+        return cleaningTools > 0;
+    }
+
+
     public void Save()
     {
         PersistentDataManager.GameData.money = money;
+        PersistentDataManager.GameData.cleaningTools = cleaningTools;
         PersistentDataManager.GameData.containers = containers.Select(c => new GoodsContainerData(c)).ToList();
         PersistentDataManager.Save();
     }

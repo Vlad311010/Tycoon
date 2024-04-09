@@ -58,8 +58,10 @@ public class GridBlocker : MonoBehaviour, IClickable, IContainPersistentData
 
     public void OnLeftClick()
     {
-        Debug.Log("Window popup Open");
-        GameEvents.current.PopupWindowCall(popupWindowText, true, true, () => Remove());
+        if (ShopManager.current.PossessesCleaningTool())
+            GameEvents.current.PopupWindowCall(popupWindowText, true, true, () => { ShopManager.current.UseCleaninigTool(); Remove(); });
+        else
+            GameEvents.current.PopupWindowCall(popupWindowText, true, false, () => { });
     }
 
     public void OnRightClick()
@@ -69,7 +71,6 @@ public class GridBlocker : MonoBehaviour, IClickable, IContainPersistentData
     
     public void Save()
     {
-
         GridData gridData = new Structs.GridData(this);
         if (PersistentDataManager.GameData.grids.Contains(gridData))
         {

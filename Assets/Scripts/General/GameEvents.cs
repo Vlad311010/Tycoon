@@ -45,6 +45,15 @@ public class GameEvents : MonoBehaviour
         }
     }
 
+    public event Action<int> onCleaningToolUsage;
+    public void CleaningToolUsage(int toolsLeft)
+    {
+        if (onCleaningToolUsage != null)
+        {
+            onCleaningToolUsage(toolsLeft);
+        }
+    }
+
     public event Action<PlaceableSO> onSelectedPlacableObjectChange;
     public void SelectedPlacableObjectChange(PlaceableSO objectData)
     {
@@ -65,7 +74,7 @@ public class GameEvents : MonoBehaviour
     }
 
     public event Action onBuilingModeExit;
-    public void ExitBuildngMode()
+    public void ExitBuildingMode()
     {
         if (onBuilingModeExit != null)
         {

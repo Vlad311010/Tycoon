@@ -25,13 +25,19 @@ public class PlayerInteractions : MonoBehaviour
         
         GameEvents.current.onBuilingModeEnter += EnterBuildingMode;
         GameEvents.current.onBuilingModeExit += ExitBuildingMode;
-        
+    }
+
+    private void OnDestroy()
+    {
+        GameEvents.current.onSelectedPlacableObjectChange -= ChangePlacableObject;
+
+        GameEvents.current.onBuilingModeEnter -= EnterBuildingMode;
+        GameEvents.current.onBuilingModeExit -= ExitBuildingMode;
     }
 
     void Start()
     {
         CreatePreview();
-        GameEvents.current.ExitBuildngMode();
     }
 
     void Update()
@@ -47,6 +53,7 @@ public class PlayerInteractions : MonoBehaviour
 
     private void ChangePlacableObject(PlaceableSO objectData)
     {
+        Debug.Log(objectToPlace.name + " -> " + objectData.name);
         objectToPlace = objectData;
         CreatePreview();
     }
@@ -94,13 +101,17 @@ public class PlayerInteractions : MonoBehaviour
     }
 
 
+
     public void Build(InputAction.CallbackContext ctx)
     {
-        if (Utils.GetMouseWorldPositionRaycast(out Vector3 mousePos, gridLayerMask, out Collider gridCollider))
+        if (ShopManager.current.HaveEnoughMoney(objectToPlace.price) && 
+            Utils.GetMouseWorldPositionRaycast(out Vector3 mousePos, gridLayerMask, out Collider gridCollider))
         {
             BuildingGrid grid = gridCollider.GetComponent<BuildingGrid>();
+            Debug.Log("objectToPlace " + objectToPlace.name);
             if (grid.PlaceObject(objectToPlace, mousePos, placingRotation, out GameObject placedGO))
             {
+                ShopManager.current.AddMoney(-objectToPlace.price);
                 GoodsContainer container = placedGO.GetComponent<GoodsContainer>();
                 Debug.Assert(container != null, "Placable object prefab does not contaion GoodsContainer script");
             }
@@ -113,8 +124,14 @@ public class PlayerInteractions : MonoBehaviour
         {
             BuildingGrid grid = gridCollider.GetComponent<BuildingGrid>();
             if (!grid.CellIsEmpty(mousePos))
-                GameEvents.current.PopupWindowCall("Are you sure you want to sell this object", true, true, () => grid.RemoveObject(mousePos));
+                GameEvents.current.PopupWindowCall("Are you sure you want to sell this object", true, true, () => RemoveCall(mousePos, grid));
         }
+    }
+
+    private void RemoveCall(Vector3 mousePos, BuildingGrid grid)
+    {
+        ShopManager.current.AddMoney(objectToPlace.price);
+        grid.RemoveObject(mousePos);
     }
 
     public void OnLeftClick(InputAction.CallbackContext ctx)
@@ -131,16 +148,5 @@ public class PlayerInteractions : MonoBehaviour
     public void OnRightClick(InputAction.CallbackContext ctx)
     {
 
-    }
-
-    public void OnMouseMovement(InputAction.CallbackContext ctx)
-    {
-        /*if (Utils.GetMouseWorldPositionRaycast(out Vector3 mousePos, blockerLayerMask | containersLayerMask, out Collider collider))
-        {
-            if (collider.TryGetComponent(out IClickable clickable))
-            {
-                clickable.OnMouseHover();
-            }
-        }*/
     }
 }

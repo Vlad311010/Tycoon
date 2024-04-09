@@ -1,7 +1,7 @@
 using Interfaces;
 using UnityEngine;
 
-public class GoodsContainer : MonoBehaviour, IInteractable
+public class GoodsContainer : MonoBehaviour, IInteractable, IClickable
 {
     public Transform LookAt { get => lookAt; }
     public PlaceableSO ObjectData { get => objectData; }
@@ -34,6 +34,16 @@ public class GoodsContainer : MonoBehaviour, IInteractable
         return objectData.goodsCost;
     }
 
+
+    public void OnLeftClick()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnRightClick()
+    {
+        throw new System.NotImplementedException();
+    }
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

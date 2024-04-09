@@ -1,3 +1,4 @@
+using UnityEditor.ShaderGraph;
 using UnityEngine;
 
 public class PlayerActions : MonoBehaviour
@@ -6,6 +7,8 @@ public class PlayerActions : MonoBehaviour
 
     [SerializeField] CameraController cameraController;
     PlayerInteractions playerInteractions;
+
+    private bool buildingModeOn = false;
 
     void Awake()
     {
@@ -23,6 +26,9 @@ public class PlayerActions : MonoBehaviour
 
         GameEvents.current.onBuilingModeEnter += EnterBuildingMode;
         GameEvents.current.onBuilingModeExit += ExitBuildingMode;
+
+        control.Gameplay.LeftClick.performed += playerInteractions.OnLeftClick;
+        control.Gameplay.RightClick.performed += playerInteractions.OnRightClick;
     }
 
     private void OnDestroy()
@@ -35,23 +41,34 @@ public class PlayerActions : MonoBehaviour
 
         GameEvents.current.onBuilingModeEnter -= EnterBuildingMode;
         GameEvents.current.onBuilingModeExit -= ExitBuildingMode;
+
+        control.Gameplay.LeftClick.performed -= playerInteractions.OnLeftClick;
+        control.Gameplay.RightClick.performed -= playerInteractions.OnRightClick;
+
+        control.Gameplay.LeftClick.performed -= playerInteractions.Build;
+        control.Gameplay.RightClick.performed -= playerInteractions.Remove;
     }
 
     private void EnterBuildingMode()
     {
+        if (buildingModeOn) return;
+        buildingModeOn = true;
+
         control.Gameplay.LeftClick.performed += playerInteractions.Build;
         control.Gameplay.RightClick.performed += playerInteractions.Remove;
 
         control.Gameplay.LeftClick.performed -= playerInteractions.OnLeftClick;
         control.Gameplay.RightClick.performed -= playerInteractions.OnRightClick;
-        control.Gameplay.MouseMove.performed -= playerInteractions.OnMouseMovement;
+
     }
 
     private void ExitBuildingMode()
     {
+        if (!buildingModeOn) return;
+        buildingModeOn = false;
+
         control.Gameplay.LeftClick.performed += playerInteractions.OnLeftClick;
         control.Gameplay.RightClick.performed += playerInteractions.OnRightClick;
-        control.Gameplay.MouseMove.performed += playerInteractions.OnMouseMovement;
 
         control.Gameplay.LeftClick.performed -= playerInteractions.Build;
         control.Gameplay.RightClick.performed -= playerInteractions.Remove;

@@ -23,7 +23,7 @@ public class ExitBuildingModeButton : MonoBehaviour, IPointerClickHandler
     {
         if (btn.interactable)
         {
-            GameEvents.current.ExitBuildngMode();
+            GameEvents.current.ExitBuildingMode();
         }
     }
 

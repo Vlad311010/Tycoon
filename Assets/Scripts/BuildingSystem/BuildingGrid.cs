@@ -147,7 +147,6 @@ public class BuildingGrid : MonoBehaviour
         }
         placedGO.GetComponent<GoodsContainer>().ConnectedGrid = this;
         placedGO.GetComponent<GoodsContainer>().GridCoordinates = cellPos;
-        GameEvents.current.GoodsContainerPlaced(placedGO.GetComponent<GoodsContainer>());
     }
 
     public void RemoveObject(Vector3 clickWorldPos)
