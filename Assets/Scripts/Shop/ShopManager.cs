@@ -46,7 +46,6 @@ public class ShopManager : MonoBehaviour, IContainPersistentData
     {
         containers = new List<GoodsContainer>();
         containers.AddRange(GameObject.FindObjectsOfType<GoodsContainer>());
-        Debug.Log(containers.Count);
 
         GameEvents.current.MoneyAmountChange(money, 0);
         GameEvents.current.CleaningToolUsage(cleaningTools);

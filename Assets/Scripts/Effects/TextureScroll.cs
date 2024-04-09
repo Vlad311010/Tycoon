@@ -5,7 +5,7 @@ public class TextureScroll : MonoBehaviour
 
     [SerializeField] Vector2 scroll;
 
-    Renderer renderer;
+    new Renderer renderer;
 
     private void Awake()
     {

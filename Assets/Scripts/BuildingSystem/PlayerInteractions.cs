@@ -53,7 +53,6 @@ public class PlayerInteractions : MonoBehaviour
 
     private void ChangePlacableObject(PlaceableSO objectData)
     {
-        Debug.Log(objectToPlace.name + " -> " + objectData.name);
         objectToPlace = objectData;
         CreatePreview();
     }
@@ -65,7 +64,9 @@ public class PlayerInteractions : MonoBehaviour
             Destroy(preview);
         }
 
+
         preview = Instantiate(objectToPlace.preview, transform);
+        preview.SetActive(false);
     }
 
     private void ShowPreview()
@@ -108,7 +109,6 @@ public class PlayerInteractions : MonoBehaviour
             Utils.GetMouseWorldPositionRaycast(out Vector3 mousePos, gridLayerMask, out Collider gridCollider))
         {
             BuildingGrid grid = gridCollider.GetComponent<BuildingGrid>();
-            Debug.Log("objectToPlace " + objectToPlace.name);
             if (grid.PlaceObject(objectToPlace, mousePos, placingRotation, out GameObject placedGO))
             {
                 ShopManager.current.AddMoney(-objectToPlace.price);
